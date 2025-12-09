@@ -686,3 +686,340 @@ body {
         display: none;
     }
 }
+
+/* ========================================
+   MOBILE UI ENHANCEMENTS
+   ======================================== */
+
+/* Hamburger Menu Button */
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    transition: all var(--transition-base);
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 2px;
+    background: var(--color-electric-blue);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+    box-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile Navigation Overlay */
+.mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+}
+
+.mobile-nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid var(--color-electric-blue);
+    border-radius: 50%;
+    color: var(--color-electric-blue);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+}
+
+.close-menu:hover {
+    background: var(--color-electric-blue);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.mobile-nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-2xl);
+}
+
+.mobile-nav-link {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    padding: var(--spacing-sm) 0;
+    transition: all var(--transition-base);
+}
+
+.mobile-nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-electric-blue), var(--color-neon-purple));
+    transition: width var(--transition-base);
+}
+
+.mobile-nav-link:hover {
+    color: var(--color-electric-blue);
+    transform: translateX(10px);
+}
+
+.mobile-nav-link:hover::before {
+    width: 100%;
+}
+
+/* Geometric Tech Shapes */
+.geometric-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+    display: none;
+}
+
+.geo-shape {
+    position: absolute;
+    opacity: 0.1;
+}
+
+.geo-triangle {
+    width: 0;
+    height: 0;
+    border-left: 75px solid transparent;
+    border-right: 75px solid transparent;
+    border-bottom: 130px solid var(--color-electric-blue);
+    top: 15%;
+    right: 10%;
+    animation: rotateShape 15s linear infinite;
+    filter: blur(2px);
+}
+
+.geo-hexagon {
+    width: 100px;
+    height: 57.74px;
+    background: var(--color-neon-purple);
+    position: relative;
+    bottom: 20%;
+    left: 5%;
+    filter: blur(2px);
+    animation: float1 10s ease-in-out infinite;
+}
+
+.geo-hexagon::before,
+.geo-hexagon::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
+.geo-hexagon::before {
+    bottom: 100%;
+    border-bottom: 28.87px solid var(--color-neon-purple);
+}
+
+.geo-hexagon::after {
+    top: 100%;
+    border-top: 28.87px solid var(--color-neon-purple);
+}
+
+.geo-square {
+    width: 80px;
+    height: 80px;
+    background: var(--color-cyber-pink);
+    top: 60%;
+    right: 15%;
+    transform: rotate(45deg);
+    animation: float2 12s ease-in-out infinite;
+    filter: blur(2px);
+}
+
+@keyframes rotateShape {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile Bottom Button */
+.mobile-bottom-button {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-md);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
+    z-index: 999;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.btn-mobile-register {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: linear-gradient(135deg, var(--color-electric-blue) 0%, #0099cc 100%);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    color: white;
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.5);
+    transition: all var(--transition-base);
+}
+
+.btn-mobile-register::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: mobileButtonShine 3s infinite;
+}
+
+@keyframes mobileButtonShine {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.btn-mobile-register:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.4);
+}
+
+.btn-arrow {
+    font-size: 1.5rem;
+    transition: transform var(--transition-base);
+}
+
+.btn-mobile-register:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+/* Mobile-specific Media Queries */
+@media (max-width: 768px) {
+
+    /* Show hamburger menu */
+    .hamburger-menu {
+        display: flex;
+    }
+
+    /* Hide university badge text on smaller screens */
+    .uni-text {
+        display: none;
+    }
+
+    /* Show geometric shapes on mobile */
+    .geometric-shapes {
+        display: block;
+    }
+
+    /* Show mobile bottom button */
+    .mobile-bottom-button {
+        display: block;
+    }
+
+    /* Hide regular action buttons on mobile */
+    .action-buttons {
+        display: none;
+    }
+
+    /* Adjust main content for mobile button */
+    .main-content {
+        padding-bottom: 100px;
+    }
+
+    /* Optimize header for mobile */
+    .gala-text {
+        font-size: 0.7rem;
+        max-width: 150px;
+        line-height: 1.2;
+    }
+
+    .header-right {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .gala-text {
+        display: none;
+    }
+
+    .hamburger-menu {
+        order: -1;
+    }
+}

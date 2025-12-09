@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code/Beyond - Tech Event 2025</title>
-    <meta name="description" content="Join Code/Beyond, a futuristic tech event as part of Business & Cultural Gala 2025 at University of Gwadar">
+    <meta name="description"
+        content="Join Code/Beyond, a futuristic tech event as part of Business & Cultural Gala 2025 at University of Gwadar">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
     <!-- Neural Network Background -->
     <canvas id="neural-network"></canvas>
-    
+
     <!-- Matrix Rain Background -->
     <canvas id="matrix-rain"></canvas>
 
@@ -22,8 +27,9 @@
         <div class="header-left">
             <div class="golden-logo">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#gold-gradient)" stroke-width="2" fill="none"/>
-                    <circle cx="16" cy="16" r="4" fill="url(#gold-gradient)"/>
+                    <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#gold-gradient)" stroke-width="2"
+                        fill="none" />
+                    <circle cx="16" cy="16" r="4" fill="url(#gold-gradient)" />
                     <defs>
                         <linearGradient id="gold-gradient" x1="4" y1="2" x2="28" y2="30">
                             <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
@@ -35,12 +41,28 @@
             <span class="gala-text">Part of Business & Cultural Gala 2025</span>
         </div>
         <div class="header-right">
+            <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
             <div class="university-badge">
                 <div class="uni-icon">UG</div>
                 <span class="uni-text">University of Gwadar</span>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobile-nav">
+        <button class="close-menu" id="close-menu" aria-label="Close Menu">×</button>
+        <nav class="mobile-nav-content">
+            <a href="#home" class="mobile-nav-link">Home</a>
+            <a href="#about" class="mobile-nav-link">About Event</a>
+            <a href="#register" class="mobile-nav-link">Register</a>
+            <a href="#contact" class="mobile-nav-link">Contact</a>
+        </nav>
+    </div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -88,7 +110,7 @@
                 </button>
                 <button class="btn btn-outline" id="video-btn">
                     <svg class="play-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M5 3L17 10L5 17V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M5 3L17 10L5 17V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                     </svg>
                     <span class="btn-text">Watch Video</span>
                     <span class="btn-glow"></span>
@@ -100,8 +122,24 @@
         <div class="floating-element element-1"></div>
         <div class="floating-element element-2"></div>
         <div class="floating-element element-3"></div>
+
+        <!-- Geometric Tech Shapes for Mobile -->
+        <div class="geometric-shapes">
+            <div class="geo-shape geo-triangle"></div>
+            <div class="geo-shape geo-hexagon"></div>
+            <div class="geo-shape geo-square"></div>
+        </div>
     </main>
+
+    <!-- Mobile Sticky Bottom Button -->
+    <div class="mobile-bottom-button">
+        <button class="btn-mobile-register" id="mobile-register-btn">
+            <span class="btn-text">Register Now</span>
+            <span class="btn-arrow">→</span>
+        </button>
+    </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

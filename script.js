@@ -185,17 +185,77 @@ function initMatrixRain() {
 function initButtonHandlers() {
     const registerBtn = document.getElementById('register-btn');
     const videoBtn = document.getElementById('video-btn');
+    const mobileRegisterBtn = document.getElementById('mobile-register-btn');
 
-    registerBtn.addEventListener('click', () => {
-        // Add your registration logic here
-        console.log('Register Project clicked');
-        alert('Registration portal coming soon!');
+    // Desktop register button
+    if (registerBtn) {
+        registerBtn.addEventListener('click', () => {
+            console.log('Register Project clicked');
+            alert('Registration portal coming soon!');
+        });
+    }
+
+    // Desktop video button
+    if (videoBtn) {
+        videoBtn.addEventListener('click', () => {
+            console.log('Watch Video clicked');
+            alert('Event video will be available soon!');
+        });
+    }
+
+    // Mobile register button
+    if (mobileRegisterBtn) {
+        mobileRegisterBtn.addEventListener('click', () => {
+            console.log('Mobile Register clicked');
+            alert('Registration portal coming soon!');
+        });
+    }
+}
+
+// ========================================
+// MOBILE NAVIGATION MENU
+// ========================================
+
+function initMobileNav() {
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const mobileNav = document.getElementById('mobile-nav');
+    const closeMenu = document.getElementById('close-menu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    // Open mobile menu
+    if (hamburgerMenu) {
+        hamburgerMenu.addEventListener('click', () => {
+            hamburgerMenu.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+        });
+    }
+
+    // Close mobile menu
+    if (closeMenu) {
+        closeMenu.addEventListener('click', () => {
+            hamburgerMenu.classList.remove('active');
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Close menu when clicking a link
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerMenu.classList.remove('active');
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = '';
+        });
     });
 
-    videoBtn.addEventListener('click', () => {
-        // Add your video modal logic here
-        console.log('Watch Video clicked');
-        alert('Event video will be available soon!');
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+            hamburgerMenu.classList.remove('active');
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     });
 }
 
@@ -284,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNeuralNetwork();
     initMatrixRain();
     initButtonHandlers();
+    initMobileNav();
     initMouseEffects();
     initScrollEffects();
 
