@@ -141,13 +141,18 @@ function initMatrixRain() {
 
     const binary = '01';
     const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = [];
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = [];
 
     // Initialize drops
-    for (let i = 0; i < columns; i++) {
-        drops[i] = Math.random() * canvas.height;
+    function initDrops() {
+        drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * canvas.height / fontSize;
+        }
     }
+
+    initDrops();
 
     function draw() {
         // Semi-transparent black to create trail effect
@@ -175,6 +180,9 @@ function initMatrixRain() {
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        // Recalculate columns and reinitialize drops for new width
+        columns = Math.floor(canvas.width / fontSize);
+        initDrops();
     });
 }
 
