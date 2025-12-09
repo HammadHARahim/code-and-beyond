@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Console - Code/Beyond</title>
+    <meta name="description" content="Admin dashboard for Code/Beyond event management">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#logo-gradient)" stroke-width="2"
+                        fill="none" />
+                    <circle cx="16" cy="16" r="4" fill="url(#logo-gradient)" />
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="4" y1="2" x2="28" y2="30">
+                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0099cc;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">Code/Beyond</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#projects" class="nav-item active">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="2" />
+                    <rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="2" />
+                    <rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="2" />
+                    <rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="2" />
+                </svg>
+                <span>Projects</span>
+            </a>
+            <a href="#review" class="nav-item">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 2L12.5 7.5L18 8L14 12.5L15 18L10 15L5 18L6 12.5L2 8L7.5 7.5L10 2Z"
+                        stroke="currentColor" stroke-width="2" />
+                </svg>
+                <span>Review</span>
+            </a>
+            <a href="#settings" class="nav-item">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2" />
+                    <path d="M10 2V4M10 16V18M18 10H16M4 10H2M15.5 4.5L14 6M6 14L4.5 15.5M15.5 15.5L14 14M6 6L4.5 4.5"
+                        stroke="currentColor" stroke-width="2" />
+                </svg>
+                <span>Gala Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1 class="page-title">Admin Console</h1>
+                <p class="page-subtitle">Business & Cultural Gala 2025</p>
+            </div>
+            <div class="header-right">
+                <button class="btn-icon" title="Notifications">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 2C7 2 5 4 5 7V11L3 13V14H17V13L15 11V7C15 4 13 2 10 2Z" stroke="currentColor"
+                            stroke-width="2" />
+                        <path d="M8 14V15C8 16.1 8.9 17 10 17C11.1 17 12 16.1 12 15V14" stroke="currentColor"
+                            stroke-width="2" />
+                    </svg>
+                    <span class="notification-badge">3</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Total Registrations</span>
+                    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M17 21V19C17 17.9 16.1 17 15 17H9C7.9 17 7 17.9 7 19V21M20 8V13M20 21V18M12 13C13.66 13 15 11.66 15 10C15 8.34 13.66 7 12 7C10.34 7 9 8.34 9 10C9 11.66 10.34 13 12 13Z"
+                            stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="stat-value">127</div>
+                <div class="stat-trend positive">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>12% from last month</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Pending Approvals</span>
+                    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                        <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="stat-value">18</div>
+                <div class="stat-trend warning">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 8H14" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>Awaiting review</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Live Site Traffic</span>
+                    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 13L9 7L13 11L21 3M21 3H15M21 3V9" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="stat-value">2,341</div>
+                <div class="stat-trend positive">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>8% from yesterday</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Table -->
+        <section class="table-section">
+            <div class="section-header">
+                <h2 class="section-title">Student Projects</h2>
+                <div class="section-actions">
+                    <button class="btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path
+                                d="M14 14L10 10M11 6C11 8.76 8.76 11 6 11C3.24 11 1 8.76 1 6C1 3.24 3.24 1 6 1C8.76 1 11 3.24 11 6Z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Search
+                    </button>
+                    <button class="btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 4H14M4 4V14H12V4M6 7V11M10 7V11M6 4V2H10V4" stroke="currentColor"
+                                stroke-width="2" />
+                        </svg>
+                        Filter
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Student Name</th>
+                            <th>Project Title</th>
+                            <th>Category</th>
+                            <th>Submitted</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#001</td>
+                            <td>Ahmad Khan</td>
+                            <td>AI-Powered Study Assistant</td>
+                            <td>Artificial Intelligence</td>
+                            <td>2025-12-05</td>
+                            <td><span class="badge badge-pending">Pending</span></td>
+                            <td>
+                                <button class="btn-table-action" title="View">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <button class="btn-table-action" title="Approve">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8L6 11L13 4" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#002</td>
+                            <td>Fatima Ali</td>
+                            <td>Smart Campus Navigation</td>
+                            <td>Mobile Development</td>
+                            <td>2025-12-04</td>
+                            <td><span class="badge badge-approved">Approved</span></td>
+                            <td>
+                                <button class="btn-table-action" title="View">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <button class="btn-table-action" title="Edit">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z" stroke="currentColor"
+                                            stroke-width="2" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#003</td>
+                            <td>Hassan Baloch</td>
+                            <td>Blockchain Voting System</td>
+                            <td>Blockchain</td>
+                            <td>2025-12-06</td>
+                            <td><span class="badge badge-pending">Pending</span></td>
+                            <td>
+                                <button class="btn-table-action" title="View">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <button class="btn-table-action" title="Approve">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8L6 11L13 4" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#004</td>
+                            <td>Zainab Hussain</td>
+                            <td>E-Learning Platform</td>
+                            <td>Web Development</td>
+                            <td>2025-12-03</td>
+                            <td><span class="badge badge-approved">Approved</span></td>
+                            <td>
+                                <button class="btn-table-action" title="View">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <button class="btn-table-action" title="Edit">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z" stroke="currentColor"
+                                            stroke-width="2" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#005</td>
+                            <td>Omar Ahmed</td>
+                            <td>IoT Home Automation</td>
+                            <td>Internet of Things</td>
+                            <td>2025-12-07</td>
+                            <td><span class="badge badge-pending">Pending</span></td>
+                            <td>
+                                <button class="btn-table-action" title="View">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <button class="btn-table-action" title="Approve">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8L6 11L13 4" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="table-footer">
+                <div class="table-info">
+                    Showing <strong>1-5</strong> of <strong>127</strong> projects
+                </div>
+                <div class="pagination">
+                    <button class="pagination-btn" disabled>Previous</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">Next</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
