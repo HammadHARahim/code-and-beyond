@@ -50,7 +50,7 @@ function initNeuralNetwork() {
     canvas.height = window.innerHeight;
 
     const nodes = [];
-    const nodeCount = 50;
+    const nodeCount = 80;
     const maxDistance = 150;
 
     // Node class
@@ -60,7 +60,7 @@ function initNeuralNetwork() {
             this.y = Math.random() * canvas.height;
             this.vx = (Math.random() - 0.5) * 0.5;
             this.vy = (Math.random() - 0.5) * 0.5;
-            this.radius = Math.random() * 2 + 1;
+            this.radius = Math.random() * 2.5 + 1.5;
         }
 
         update() {
@@ -75,7 +75,10 @@ function initNeuralNetwork() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fillStyle = '#00d4ff';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#00d4ff';
             ctx.fill();
+            ctx.shadowBlur = 0;
         }
     }
 
@@ -92,12 +95,12 @@ function initNeuralNetwork() {
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance < maxDistance) {
-                    const opacity = (1 - distance / maxDistance) * 0.3;
+                    const opacity = (1 - distance / maxDistance) * 0.6;
                     ctx.beginPath();
                     ctx.moveTo(nodes[i].x, nodes[i].y);
                     ctx.lineTo(nodes[j].x, nodes[j].y);
                     ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
-                    ctx.lineWidth = 0.5;
+                    ctx.lineWidth = 1.2;
                     ctx.stroke();
                 }
             }
