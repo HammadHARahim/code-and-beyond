@@ -1,0 +1,591 @@
+/* ========================================
+   PARTICIPANT DASHBOARD - CYBERPUNK DESIGN
+   ======================================== */
+
+:root {
+    /* Color Palette - Cyberpunk */
+    --color-bg-deep: #050510;
+    --color-bg-dark: #0a0a1a;
+    --color-bg-medium: #0f0f20;
+
+    /* Neon Colors */
+    --color-cyan: #00d4ff;
+    --color-cyan-glow: rgba(0, 212, 255, 0.5);
+    --color-purple: #b537ff;
+    --color-purple-glow: rgba(181, 55, 255, 0.5);
+    --color-yellow: #ffbb00;
+    --color-yellow-glow: rgba(255, 187, 0, 0.5);
+    --color-golden: #ffd700;
+
+    /* Glass */
+    --glass-bg: rgba(15, 15, 32, 0.6);
+    --glass-border: rgba(0, 212, 255, 0.2);
+
+    /* Typography */
+    --font-primary: 'Inter', sans-serif;
+    --font-display: 'Orbitron', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Transition */
+    --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   RESET & BASE
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: var(--color-bg-deep);
+    color: #ffffff;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ========================================
+   CIRCUIT BOARD BACKGROUND
+   ======================================== */
+
+#circuit-board {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.4;
+}
+
+/* ========================================
+   SIDEBAR
+   ======================================== */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 80px;
+    background: linear-gradient(180deg, rgba(10, 10, 26, 0.95), rgba(5, 5, 16, 0.95));
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    z-index: 100;
+    box-shadow: 4px 0 24px rgba(0, 212, 255, 0.1);
+}
+
+.sidebar-nav {
+    width: 100%;
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.nav-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    border-radius: 12px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    width: 4px;
+    height: 0%;
+    background: linear-gradient(180deg, var(--color-cyan), var(--color-purple));
+    border-radius: 0 2px 2px 0;
+    transition: height var(--transition-base);
+    box-shadow: 0 0 12px var(--color-cyan);
+}
+
+.nav-item.active::before {
+    height: 100%;
+}
+
+.nav-item:hover {
+    color: var(--color-cyan);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+.nav-item.active {
+    color: var(--color-cyan);
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+.nav-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    opacity: 0;
+    background: radial-gradient(circle at center, var(--color-cyan-glow), transparent);
+    transition: opacity var(--transition-base);
+}
+
+.nav-item:hover .nav-glow,
+.nav-item.active .nav-glow {
+    opacity: 0.3;
+}
+
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
+
+.main-content {
+    margin-left: 80px;
+    padding: var(--spacing-xl);
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+}
+
+/* ========================================
+   DASHBOARD HEADER
+   ======================================== */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+}
+
+.gala-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 24px;
+}
+
+.badge-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-golden);
+    text-shadow: 0 0 8px var(--color-golden);
+}
+
+.code-beyond-logo {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.bracket {
+    color: var(--color-cyan);
+    text-shadow: 0 0 12px var(--color-cyan-glow);
+}
+
+.logo-text {
+    background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 12px var(--color-cyan-glow));
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.welcome-text {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.user-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-cyan);
+    text-shadow: 0 0 8px var(--color-cyan-glow);
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.125rem;
+    box-shadow: 0 0 24px var(--color-cyan-glow);
+}
+
+/* ========================================
+   GLASS CARDS
+   ======================================== */
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: all var(--transition-base);
+}
+
+.glass-card:hover {
+    border-color: var(--color-cyan);
+    box-shadow: 0 12px 48px rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   DASHBOARD CONTENT
+   ======================================== */
+
+.dashboard-content {
+    display: grid;
+    gap: var(--spacing-xl);
+}
+
+/* ========================================
+   ENTRY PASS CARD
+   ======================================== */
+
+.entry-pass-card {
+    padding: var(--spacing-xl);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-cyan);
+    text-shadow: 0 0 12px var(--color-cyan-glow);
+}
+
+.card-icon {
+    color: var(--color-cyan);
+    filter: drop-shadow(0 0 12px var(--color-cyan-glow));
+}
+
+.pass-content {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+}
+
+/* QR Code */
+.qr-code-container {
+    position: relative;
+}
+
+.qr-code {
+    width: 280px;
+    height: 280px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 48px var(--color-cyan-glow);
+    animation: qrPulse 3s ease-in-out infinite;
+}
+
+@keyframes qrPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 48px var(--color-cyan-glow);
+    }
+
+    50% {
+        box-shadow: 0 0 64px var(--color-cyan-glow), 0 0 96px rgba(0, 212, 255, 0.3);
+    }
+}
+
+.qr-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.qr-scanner-line {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: var(--color-cyan);
+    box-shadow: 0 0 12px var(--color-cyan);
+    animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(280px);
+    }
+}
+
+/* Pass Details */
+.pass-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.detail-label {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.detail-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.project-title {
+    font-size: 1.5rem;
+    color: var(--color-cyan);
+    text-shadow: 0 0 12px var(--color-cyan-glow);
+}
+
+.participant-id {
+    font-family: var(--font-display);
+    color: var(--color-purple);
+    text-shadow: 0 0 8px var(--color-purple-glow);
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 24px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background: rgba(255, 187, 0, 0.1);
+    color: var(--color-yellow);
+    border: 1px solid rgba(255, 187, 0, 0.3);
+    box-shadow: 0 0 16px var(--color-yellow-glow);
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Pass Footer */
+.pass-footer {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--glass-border);
+}
+
+.btn-download,
+.btn-share {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-download {
+    background: linear-gradient(135deg, var(--color-cyan), #0099cc);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 16px var(--color-cyan-glow);
+}
+
+.btn-download:hover {
+    box-shadow: 0 8px 24px var(--color-cyan-glow);
+    transform: translateY(-2px);
+}
+
+.btn-share {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--color-cyan);
+}
+
+.btn-share:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--color-cyan);
+}
+
+/* ========================================
+   QUICK STATS
+   ======================================== */
+
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.stat-card {
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.stat-icon {
+    color: var(--color-cyan);
+    filter: drop-shadow(0 0 8px var(--color-cyan-glow));
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-label {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-cyan);
+    text-shadow: 0 0 12px var(--color-cyan-glow);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1200px) {
+    .pass-content {
+        grid-template-columns: 1fr;
+    }
+
+    .qr-code-container {
+        justify-self: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .main-content {
+        margin-left: 60px;
+        padding: var(--spacing-md);
+    }
+
+    .nav-label {
+        display: none;
+    }
+
+    .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .quick-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .pass-footer {
+        flex-direction: column;
+    }
+}
