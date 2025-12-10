@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Code/Beyond</title>
+    <meta name="description" content="Login to Code/Beyond event dashboard">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <!-- Circuit Board Background -->
+    <canvas id="circuit-board"></canvas>
+
+    <!-- Main Content -->
+    <main class="login-container">
+        <!-- Login Card -->
+        <div class="login-card glass-card">
+            <!-- Header -->
+            <div class="login-header">
+                <div class="logo">
+                    <span class="bracket">&lt;</span>
+                    <span class="logo-text">Code/Beyond</span>
+                    <span class="bracket">&gt;</span>
+                </div>
+                <p class="subtitle">Business & Cultural Gala 2025</p>
+            </div>
+
+            <!-- Login Form -->
+            <form class="login-form" id="login-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="your.email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="remember">
+                        <span class="checkbox-label">Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Login as</label>
+                    <div class="role-selector">
+                        <label class="role-option">
+                            <input type="radio" name="role" value="participant" checked>
+                            <span class="role-label">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M10 2C7 2 5 4 5 7C5 10 7 12 10 12C13 12 15 10 15 7C15 4 13 2 10 2Z"
+                                        stroke="currentColor" stroke-width="2" />
+                                    <path d="M3 18C3 14 6 13 10 13C14 13 17 14 17 18" stroke="currentColor"
+                                        stroke-width="2" />
+                                </svg>
+                                Participant
+                            </span>
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="admin">
+                            <span class="role-label">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M10 2L12.5 7.5L18 8L14 12.5L15 18L10 15L5 18L6 12.5L2 8L7.5 7.5L10 2Z"
+                                        stroke="currentColor" stroke-width="2" />
+                                </svg>
+                                Admin
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span class="btn-text">Sign In</span>
+                    <svg class="btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p class="footer-text">Don't have an account? <a href="register.html" class="register-link">Register
+                        Project</a></p>
+                <a href="index.html" class="back-link">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M15 8H1M1 8L8 1M1 8L8 15" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="login.js"></script>
+</body>
+
+</html>

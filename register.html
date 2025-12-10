@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Project - Code/Beyond</title>
+    <meta name="description" content="Register your project for Code/Beyond event">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="register.css">
+</head>
+
+<body>
+    <!-- Circuit Board Background -->
+    <canvas id="circuit-board"></canvas>
+
+    <!-- Main Content -->
+    <main class="register-container">
+        <!-- Registration Card -->
+        <div class="register-card glass-card">
+            <!-- Header -->
+            <div class="register-header">
+                <div class="logo">
+                    <span class="bracket">&lt;</span>
+                    <span class="logo-text">Code/Beyond</span>
+                    <span class="bracket">&gt;</span>
+                </div>
+                <h1 class="page-title">Project Registration</h1>
+                <p class="subtitle">Business & Cultural Gala 2025</p>
+            </div>
+
+            <!-- Registration Form -->
+            <form class="register-form" id="register-form">
+                <!-- Team Information -->
+                <div class="form-section">
+                    <h2 class="section-title">Team Information</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="team-name" class="form-label">Team Name *</label>
+                            <input type="text" id="team-name" class="form-input" placeholder="Enter your team name"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="team-lead" class="form-label">Team Lead *</label>
+                            <input type="text" id="team-lead" class="form-input" placeholder="Full name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" id="email" class="form-input" placeholder="team@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Contact Number *</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="+92 300 1234567" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="team-size" class="form-label">Team Size *</label>
+                        <select id="team-size" class="form-select" required>
+                            <option value="">Select team size</option>
+                            <option value="1">1 Member (Individual)</option>
+                            <option value="2">2 Members</option>
+                            <option value="3">3 Members</option>
+                            <option value="4">4 Members</option>
+                            <option value="5">5+ Members</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Project Information -->
+                <div class="form-section">
+                    <h2 class="section-title">Project Details</h2>
+
+                    <div class="form-group">
+                        <label for="project-title" class="form-label">Project Title *</label>
+                        <input type="text" id="project-title" class="form-input" placeholder="Enter your project title"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category" class="form-label">Project Category *</label>
+                        <select id="category" class="form-select" required>
+                            <option value="">Select a category</option>
+                            <option value="ai">Artificial Intelligence</option>
+                            <option value="web">Web Development</option>
+                            <option value="mobile">Mobile Development</option>
+                            <option value="blockchain">Blockchain</option>
+                            <option value="iot">Internet of Things</option>
+                            <option value="data">Data Science</option>
+                            <option value="cybersecurity">Cybersecurity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="form-label">Project Description *</label>
+                        <textarea id="description" class="form-textarea" rows="5"
+                            placeholder="Describe your project, its purpose, and key features..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tech-stack" class="form-label">Technologies Used</label>
+                        <input type="text" id="tech-stack" class="form-input"
+                            placeholder="e.g., React, Node.js, MongoDB, TensorFlow">
+                    </div>
+                </div>
+
+                <!-- Project Assets -->
+                <div class="form-section">
+                    <h2 class="section-title">Project Assets</h2>
+
+                    <div class="form-group">
+                        <label for="project-url" class="form-label">Project URL (GitHub/Demo)</label>
+                        <input type="url" id="project-url" class="form-input"
+                            placeholder="https://github.com/username/project">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="video-url" class="form-label">Demo Video URL (Optional)</label>
+                        <input type="url" id="video-url" class="form-input"
+                            placeholder="https://youtube.com/watch?v=...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Project Document (Optional)</label>
+                        <div class="file-upload">
+                            <input type="file" id="project-doc" accept=".pdf,.doc,.docx" hidden>
+                            <label for="project-doc" class="file-upload-label">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M10 2V12M10 2L6 6M10 2L14 6" stroke="currentColor" stroke-width="2" />
+                                    <path d="M2 12V16C2 17.1 2.9 18 4 18H16C17.1 18 18 17.1 18 16V12"
+                                        stroke="currentColor" stroke-width="2" />
+                                </svg>
+                                <span id="file-name">Upload PDF/DOC</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="terms" required>
+                        <span class="checkbox-label">I agree to the terms and conditions and confirm that all
+                            information provided is accurate</span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Submit Registration</span>
+                        <svg class="btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Footer -->
+            <div class="register-footer">
+                <p class="footer-text">Already registered? <a href="login.html" class="login-link">Sign In</a></p>
+                <a href="index.html" class="back-link">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M15 8H1M1 8L8 1M1 8L8 15" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="register.js"></script>
+</body>
+
+</html>

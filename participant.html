@@ -99,75 +99,26 @@
 
         <!-- Dashboard Content -->
         <div class="dashboard-content">
-            <!-- Digital Entry Pass Card -->
-            <section class="entry-pass-card glass-card">
+            <!-- Participant Info Card -->
+            <section class="participant-info-card glass-card">
                 <div class="card-header">
-                    <h2 class="card-title">Digital Entry Pass</h2>
+                    <h2 class="card-title">Participant Information</h2>
                     <div class="card-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M20 7H4C2.9 7 2 7.9 2 9V20C2 21.1 2.9 22 4 22H20C21.1 22 22 21.1 22 20V9C22 7.9 21.1 7 20 7Z"
-                                stroke="currentColor" stroke-width="2" />
-                            <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" stroke="currentColor"
+                            <path d="M20 21V19C20 16.79 18.21 15 16 15H8C5.79 15 4 16.79 4 19V21" stroke="currentColor"
                                 stroke-width="2" />
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
                         </svg>
                     </div>
                 </div>
 
-                <div class="pass-content">
-                    <div class="qr-code-container">
-                        <div class="qr-code">
-                            <svg viewBox="0 0 120 120" class="qr-svg">
-                                <!-- QR Code Pattern -->
-                                <rect x="0" y="0" width="120" height="120" fill="#000" />
-                                <!-- Position markers -->
-                                <rect x="8" y="8" width="24" height="24" fill="#00d4ff" />
-                                <rect x="12" y="12" width="16" height="16" fill="#000" />
-                                <rect x="16" y="16" width="8" height="8" fill="#00d4ff" />
-
-                                <rect x="88" y="8" width="24" height="24" fill="#00d4ff" />
-                                <rect x="92" y="12" width="16" height="16" fill="#000" />
-                                <rect x="96" y="16" width="8" height="8" fill="#00d4ff" />
-
-                                <rect x="8" y="88" width="24" height="24" fill="#00d4ff" />
-                                <rect x="12" y="92" width="16" height="16" fill="#000" />
-                                <rect x="16" y="96" width="8" height="8" fill="#00d4ff" />
-
-                                <!-- Data pattern -->
-                                <rect x="40" y="40" width="4" height="4" fill="#00d4ff" />
-                                <rect x="48" y="40" width="4" height="4" fill="#00d4ff" />
-                                <rect x="56" y="40" width="4" height="4" fill="#00d4ff" />
-                                <rect x="64" y="40" width="4" height="4" fill="#00d4ff" />
-                                <rect x="72" y="40" width="4" height="4" fill="#00d4ff" />
-                                <rect x="80" y="40" width="4" height="4" fill="#00d4ff" />
-
-                                <rect x="40" y="48" width="4" height="4" fill="#00d4ff" />
-                                <rect x="56" y="48" width="4" height="4" fill="#00d4ff" />
-                                <rect x="72" y="48" width="4" height="4" fill="#00d4ff" />
-
-                                <rect x="40" y="56" width="4" height="4" fill="#00d4ff" />
-                                <rect x="48" y="56" width="4" height="4" fill="#00d4ff" />
-                                <rect x="64" y="56" width="4" height="4" fill="#00d4ff" />
-                                <rect x="80" y="56" width="4" height="4" fill="#00d4ff" />
-
-                                <rect x="40" y="64" width="4" height="4" fill="#00d4ff" />
-                                <rect x="56" y="64" width="4" height="4" fill="#00d4ff" />
-                                <rect x="64" y="64" width="4" height="4" fill="#00d4ff" />
-                                <rect x="80" y="64" width="4" height="4" fill="#00d4ff" />
-
-                                <rect x="48" y="72" width="4" height="4" fill="#00d4ff" />
-                                <rect x="56" y="72" width="4" height="4" fill="#00d4ff" />
-                                <rect x="72" y="72" width="4" height="4" fill="#00d4ff" />
-
-                                <rect x="40" y="80" width="4" height="4" fill="#00d4ff" />
-                                <rect x="64" y="80" width="4" height="4" fill="#00d4ff" />
-                                <rect x="80" y="80" width="4" height="4" fill="#00d4ff" />
-                            </svg>
-                        </div>
-                        <div class="qr-scanner-line"></div>
+                <div class="participant-content">
+                    <div class="participant-id-display">
+                        <div class="id-label">Participant ID</div>
+                        <div class="id-value">CB-2026-0142</div>
                     </div>
 
-                    <div class="pass-details">
+                    <div class="participant-details">
                         <div class="detail-item">
                             <div class="detail-label">Project</div>
                             <div class="detail-value project-title">Timber Mart CRM</div>
@@ -187,29 +138,7 @@
                             <div class="detail-label">Event Date</div>
                             <div class="detail-value">January 15, 2026</div>
                         </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Participant ID</div>
-                            <div class="detail-value participant-id">CB-2026-0142</div>
-                        </div>
                     </div>
-                </div>
-
-                <div class="pass-footer">
-                    <button class="btn-download">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M14 10V13H2V10M8 2V11M8 11L5 8M8 11L11 8" stroke="currentColor" stroke-width="2" />
-                        </svg>
-                        Download Pass
-                    </button>
-                    <button class="btn-share">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <circle cx="4" cy="8" r="2" stroke="currentColor" stroke-width="2" />
-                            <circle cx="12" cy="4" r="2" stroke="currentColor" stroke-width="2" />
-                            <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="2" />
-                            <path d="M6 7L10 5M6 9L10 11" stroke="currentColor" stroke-width="2" />
-                        </svg>
-                        Share
-                    </button>
                 </div>
             </section>
 

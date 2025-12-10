@@ -192,30 +192,27 @@ function initMatrixRain() {
 
 function initButtonHandlers() {
     const registerBtn = document.getElementById('register-btn');
-    const videoBtn = document.getElementById('video-btn');
+    const loginBtn = document.getElementById('login-btn');
     const mobileRegisterBtn = document.getElementById('mobile-register-btn');
 
     // Desktop register button
     if (registerBtn) {
         registerBtn.addEventListener('click', () => {
-            console.log('Register Project clicked');
-            alert('Registration portal coming soon!');
+            window.location.href = 'register.html';
         });
     }
 
-    // Desktop video button
-    if (videoBtn) {
-        videoBtn.addEventListener('click', () => {
-            console.log('Watch Video clicked');
-            alert('Event video will be available soon!');
+    // Desktop login button
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            window.location.href = 'login.html';
         });
     }
 
     // Mobile register button
     if (mobileRegisterBtn) {
         mobileRegisterBtn.addEventListener('click', () => {
-            console.log('Mobile Register clicked');
-            alert('Registration portal coming soon!');
+            window.location.href = 'register.html';
         });
     }
 }
