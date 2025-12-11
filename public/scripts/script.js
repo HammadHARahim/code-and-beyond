@@ -198,21 +198,21 @@ function initButtonHandlers() {
     // Desktop register button
     if (registerBtn) {
         registerBtn.addEventListener('click', () => {
-            window.location.href = 'register.html';
+            window.location.href = 'pages/register.html';
         });
     }
 
     // Desktop login button
     if (loginBtn) {
         loginBtn.addEventListener('click', () => {
-            window.location.href = 'login.html';
+            window.location.href = 'pages/login.html';
         });
     }
 
     // Mobile register button
     if (mobileRegisterBtn) {
         mobileRegisterBtn.addEventListener('click', () => {
-            window.location.href = 'register.html';
+            window.location.href = 'pages/register.html';
         });
     }
 }

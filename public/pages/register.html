@@ -75,6 +75,54 @@
                     </div>
                 </div>
 
+                <!-- Accommodation Information -->
+                <div class="form-section">
+                    <h2 class="section-title">Accommodation</h2>
+
+                    <div class="form-group">
+                        <label class="form-label">Do you require accommodation? *</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="accommodation" value="yes" id="accommodation-yes" required>
+                                <span class="radio-label">Yes, I need accommodation</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="accommodation" value="no" id="accommodation-no" required>
+                                <span class="radio-label">No, I don't need accommodation</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Accommodation Details (shown when "yes" is selected) -->
+                    <div id="accommodation-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="accommodation-type" class="form-label">Accommodation Type *</label>
+                            <select id="accommodation-type" class="form-select">
+                                <option value="">Select accommodation type</option>
+                                <option value="male">Male Accommodation</option>
+                                <option value="female">Female Accommodation</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accommodation-duration" class="form-label">Duration *</label>
+                            <select id="accommodation-duration" class="form-select">
+                                <option value="">Select duration</option>
+                                <option value="1-night">1 Night</option>
+                                <option value="2-nights">2 Nights</option>
+                                <option value="3-nights">3 Nights</option>
+                                <option value="event-only">Event Days Only</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="special-requirements" class="form-label">Special Requirements (Optional)</label>
+                            <textarea id="special-requirements" class="form-textarea" rows="3"
+                                placeholder="Any special accommodation needs or dietary requirements..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Project Information -->
                 <div class="form-section">
                     <h2 class="section-title">Project Details</h2>

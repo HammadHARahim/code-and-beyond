@@ -71,7 +71,41 @@ function drawCircuitBoard() {
 initCircuitBoard();
 drawCircuitBoard();
 
-// File Upload Handler
+// ========================================
+// ACCOMMODATION TOGGLE
+// ========================================
+
+const accommodationYes = document.getElementById('accommodation-yes');
+const accommodationNo = document.getElementById('accommodation-no');
+const accommodationDetails = document.getElementById('accommodation-details');
+const accommodationType = document.getElementById('accommodation-type');
+const accommodationDuration = document.getElementById('accommodation-duration');
+
+function toggleAccommodationDetails() {
+    if (accommodationYes && accommodationYes.checked) {
+        accommodationDetails.style.display = 'flex';
+        accommodationType.setAttribute('required', 'required');
+        accommodationDuration.setAttribute('required', 'required');
+    } else {
+        accommodationDetails.style.display = 'none';
+        accommodationType.removeAttribute('required');
+        accommodationDuration.removeAttribute('required');
+        accommodationType.value = '';
+        accommodationDuration.value = '';
+    }
+}
+
+if (accommodationYes) {
+    accommodationYes.addEventListener('change', toggleAccommodationDetails);
+}
+
+if (accommodationNo) {
+    accommodationNo.addEventListener('change', toggleAccommodationDetails);
+}
+
+// ========================================
+// FILE UPLOAD HANDLER
+// ========================================
 const fileInput = document.getElementById('project-doc');
 const fileNameDisplay = document.getElementById('file-name');
 
@@ -90,12 +124,20 @@ const registerForm = document.getElementById('register-form');
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    const accommodationRequired = document.querySelector('input[name="accommodation"]:checked')?.value === 'yes';
+
     const formData = {
         teamName: document.getElementById('team-name').value,
         teamLead: document.getElementById('team-lead').value,
         email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
         teamSize: document.getElementById('team-size').value,
+        accommodation: {
+            required: accommodationRequired,
+            type: accommodationRequired ? document.getElementById('accommodation-type').value : null,
+            duration: accommodationRequired ? document.getElementById('accommodation-duration').value : null,
+            specialRequirements: accommodationRequired ? document.getElementById('special-requirements').value : null
+        },
         projectTitle: document.getElementById('project-title').value,
         category: document.getElementById('category').value,
         description: document.getElementById('description').value,
