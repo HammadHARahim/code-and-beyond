@@ -1,6 +1,6 @@
-# Code/Beyond - Tech Event Landing Page
+# Code & Beyond - Tech Event Landing Page
 
-A futuristic, cyberpunk-themed landing page for the Code/Beyond tech event, part of the Business & Cultural Gala 2025 at the University of Gwadar.
+A futuristic, cyberpunk-themed landing page for the Code & Beyond tech event, part of the Business & Cultural Gala 2025 at the University of Gwadar.
 
 ## Features
 
@@ -33,7 +33,7 @@ const eventDate = new Date('2026-01-15T10:00:00').getTime();
 
 ## Event Details
 
-- **Event:** Code/Beyond Tech Event
+- **Event:** Code & Beyond Tech Event
 - **Part of:** Business & Cultural Gala 2025
 - **Location:** University of Gwadar
 - **Date:** January 15, 2026
