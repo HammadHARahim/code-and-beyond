@@ -99,21 +99,25 @@ body {
 
 .top-header {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 70px;
+    top: var(--spacing-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: 140px;
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px 0 rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 0 var(--spacing-xl);
+    gap: var(--spacing-xl);
+    padding: var(--spacing-md) var(--spacing-2xl);
     z-index: 100;
     transition: all var(--transition-base);
+    overflow: visible;
 }
 
 .top-header::before {
@@ -128,43 +132,69 @@ body {
             var(--color-cyan) 50%,
             transparent 100%);
     opacity: 0.5;
+    border-radius: 16px 16px 0 0;
 }
 
 .header-left {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
+    position: relative;
+    z-index: 2;
 }
 
-.golden-logo {
-    width: 32px;
-    height: 32px;
-    animation: float 3s ease-in-out infinite;
+/* BCG Logo */
+.bcg-logo {
+    height: 450px;
+    width: auto;
+    transition: all var(--transition-base);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
 }
 
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
+.bcg-logo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
 }
 
-.gala-text {
-    font-family: var(--font-primary);
+/* Gala Badge */
+.gala-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 24px;
+}
+
+.badge-text {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: var(--color-golden);
+    text-shadow: 0 0 8px var(--color-golden);
+}
+
+/* Code & Beyond Logo */
+.code-beyond-logo {
+    display: flex;
+    align-items: center;
+}
+
+.event-logo {
+    height: 45px;
+    width: auto;
+    transition: all var(--transition-base);
+}
+
+.event-logo:hover {
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+    transform: scale(1.02);
 }
 
 .header-right {
     display: flex;
     align-items: center;
+    z-index: 2;
 }
 
 .university-badge {
@@ -216,7 +246,7 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 10;
-    padding-top: 70px;
+    padding-top: 200px;
 }
 
 /* ========================================
