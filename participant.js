@@ -3,17 +3,17 @@
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    initCircuitBoard();
+    initMatrixRainNeuralNetwork();
     initNavigation();
     initButtons();
     initAnimations();
 });
 
 // ========================================
-// CIRCUIT BOARD BACKGROUND
+// MATRIX RAIN + NEURAL NETWORK BACKGROUND
 // ========================================
 
-function initCircuitBoard() {
+function initMatrixRainNeuralNetwork() {
     const canvas = document.getElementById('circuit-board');
     if (!canvas) return;
 
@@ -21,80 +21,127 @@ function initCircuitBoard() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const lines = [];
+    // Matrix rain setup
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+    const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*(){}[]<>/\\|';
+
+    // Neural network nodes
     const nodes = [];
-    const lineCount = 30;
-    const nodeCount = 50;
+    const nodeCount = 40;
+    const maxConnections = 3;
+    const connectionDistance = 200;
 
-    // Create horizontal and vertical circuit lines
-    for (let i = 0; i < lineCount; i++) {
-        lines.push({
-            type: Math.random() > 0.5 ? 'horizontal' : 'vertical',
-            position: Math.random() * (lines.type === 'horizontal' ? canvas.height : canvas.width),
-            offset: Math.random() * 100,
-            speed: Math.random() * 0.5 + 0.2
-        });
-    }
-
-    // Create circuit nodes
+    // Create neural network nodes
     for (let i = 0; i < nodeCount; i++) {
         nodes.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
             size: Math.random() * 3 + 2,
-            pulse: Math.random() * Math.PI * 2
+            pulse: Math.random() * Math.PI * 2,
+            color: Math.random() > 0.5 ? '#00d4ff' : '#b537ff'
         });
     }
 
-    function drawCircuitBoard() {
-        ctx.fillStyle = 'rgba(5, 5, 16, 0.1)';
+    function animate() {
+        // Semi-transparent background for trail effect
+        ctx.fillStyle = 'rgba(5, 5, 16, 0.08)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw lines
-        ctx.strokeStyle = '#00d4ff';
-        ctx.lineWidth = 0.5;
+        // ===== MATRIX RAIN =====
+        ctx.fillStyle = '#00d4ff';
+        ctx.font = `${fontSize}px monospace`;
 
-        lines.forEach(line => {
-            line.offset += line.speed;
-            if (line.offset > 100) line.offset = 0;
+        for (let i = 0; i < drops.length; i++) {
+            // Random character from matrix chars
+            const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+            const x = i * fontSize;
+            const y = drops[i] * fontSize;
 
-            const alpha = Math.sin(line.offset / 100 * Math.PI) * 0.3 + 0.2;
+            // Gradient effect - brighter at the front
+            const alpha = Math.min(0.8, drops[i] / 20);
             ctx.globalAlpha = alpha;
+            ctx.fillStyle = drops[i] % 3 === 0 ? '#00d4ff' : '#00ffaa';
 
-            ctx.beginPath();
-            if (line.type === 'horizontal') {
-                ctx.moveTo(0, line.position);
-                ctx.lineTo(canvas.width, line.position);
-            } else {
-                ctx.moveTo(line.position, 0);
-                ctx.lineTo(line.position, canvas.height);
+            ctx.fillText(char, x, y);
+
+            // Reset drop to top randomly
+            if (y > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
             }
-            ctx.stroke();
+            drops[i]++;
+        }
+
+        ctx.globalAlpha = 1;
+
+        // ===== NEURAL NETWORK =====
+        // Update node positions
+        nodes.forEach(node => {
+            node.x += node.vx;
+            node.y += node.vy;
+
+            // Bounce off edges
+            if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+            if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+
+            // Keep within bounds
+            node.x = Math.max(0, Math.min(canvas.width, node.x));
+            node.y = Math.max(0, Math.min(canvas.height, node.y));
+
+            node.pulse += 0.05;
         });
+
+        // Draw connections
+        let connectionCount = 0;
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dx = nodes[i].x - nodes[j].x;
+                const dy = nodes[i].y - nodes[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < connectionDistance && connectionCount < maxConnections * nodeCount) {
+                    const alpha = (1 - distance / connectionDistance) * 0.3;
+                    ctx.strokeStyle = `rgba(0, 212, 255, ${alpha})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.stroke();
+                    connectionCount++;
+                }
+            }
+        }
 
         // Draw nodes
         nodes.forEach(node => {
-            node.pulse += 0.05;
             const pulseFactor = Math.sin(node.pulse) * 0.5 + 0.5;
 
-            ctx.globalAlpha = pulseFactor * 0.6;
-            ctx.fillStyle = '#00d4ff';
+            // Main node
+            ctx.globalAlpha = pulseFactor * 0.8 + 0.2;
+            ctx.fillStyle = node.color;
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
             ctx.fill();
 
             // Glow effect
-            ctx.globalAlpha = pulseFactor * 0.3;
+            ctx.globalAlpha = pulseFactor * 0.4;
+            const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.size * 3);
+            gradient.addColorStop(0, node.color);
+            gradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradient;
             ctx.beginPath();
-            ctx.arc(node.x, node.y, node.size * 2, 0, Math.PI * 2);
+            ctx.arc(node.x, node.y, node.size * 3, 0, Math.PI * 2);
             ctx.fill();
         });
 
         ctx.globalAlpha = 1;
-        requestAnimationFrame(drawCircuitBoard);
+        requestAnimationFrame(animate);
     }
 
-    drawCircuitBoard();
+    animate();
 
     // Resize handler
     window.addEventListener('resize', () => {
@@ -144,7 +191,7 @@ function initButtons() {
     if (shareBtn) {
         shareBtn.addEventListener('click', () => {
             console.log('Share pass clicked');
-            alert('Share your entry pass via:\n• Email\n• WhatsApp\n• Social Media');
+            alert('Share your entry pass via:\\n• Email\\n• WhatsApp\\n• Social Media');
         });
     }
 }
@@ -189,4 +236,4 @@ function generateParticipantID() {
     return `CB-${year}-${num}`;
 }
 
-console.log('Participant Dashboard loaded successfully');
+console.log('Participant Dashboard loaded with Matrix Rain + Neural Network background');

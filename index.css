@@ -659,17 +659,13 @@ body {
 
 @media (max-width: 768px) {
     .top-header {
-        padding: 0 var(--spacing-md);
-        height: 60px;
+        padding: var(--spacing-md) var(--spacing-xl);
+        height: 140px;
     }
 
     .gala-text,
     .uni-text {
         font-size: 0.75rem;
-    }
-
-    .main-title {
-        font-size: clamp(2rem, 6vw, 4rem);
     }
 
     .countdown-timer {
@@ -687,17 +683,6 @@ body {
 
     .time-label {
         font-size: 0.625rem;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-        width: 100%;
-        padding: 0 var(--spacing-md);
-    }
-
-    .btn {
-        width: 100%;
-        justify-content: center;
     }
 }
 
@@ -1012,24 +997,10 @@ body {
         display: none;
     }
 
+
     /* Show geometric shapes on mobile */
     .geometric-shapes {
         display: block;
-    }
-
-    /* Show mobile bottom button */
-    .mobile-bottom-button {
-        display: block;
-    }
-
-    /* Hide regular action buttons on mobile */
-    .action-buttons {
-        display: none;
-    }
-
-    /* Adjust main content for mobile button */
-    .main-content {
-        padding-bottom: 100px;
     }
 
     /* Optimize header for mobile */
