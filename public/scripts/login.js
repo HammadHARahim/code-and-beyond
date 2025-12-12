@@ -76,7 +76,31 @@ loginForm.addEventListener('submit', (e) => {
     const password = document.getElementById('password').value;
     const role = document.querySelector('input[name="role"]:checked').value;
 
-    console.log('Login attempt:', { email, role });
+    // Get stored users from localStorage
+    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
+
+    // Find user with matching email
+    const user = users.find(u => u.email === email);
+
+    // Validate credentials
+    if (!user) {
+        alert('Email not found. Please register first or check your email address.');
+        return;
+    }
+
+    if (user.password !== password) {
+        alert('Incorrect password. Please try again.');
+        return;
+    }
+
+    // Store current session
+    localStorage.setItem('currentUser', JSON.stringify({
+        email: user.email,
+        role: role,
+        loginTime: new Date().toISOString()
+    }));
+
+    console.log('Login successful:', { email, role });
 
     // Redirect based on role
     if (role === 'admin') {

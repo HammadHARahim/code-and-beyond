@@ -72,6 +72,105 @@ initCircuitBoard();
 drawCircuitBoard();
 
 // ========================================
+// PASSWORD VISIBILITY TOGGLE
+// ========================================
+
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirm-password');
+const togglePassword = document.getElementById('toggle-password');
+const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
+
+togglePassword.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+});
+
+toggleConfirmPassword.addEventListener('click', () => {
+    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    confirmPasswordInput.setAttribute('type', type);
+});
+
+// ========================================
+// PASSWORD STRENGTH CHECKER
+// ========================================
+
+const strengthFill = document.getElementById('strength-fill');
+const strengthText = document.getElementById('strength-text');
+
+function checkPasswordStrength(password) {
+    if (!password) {
+        strengthFill.className = 'strength-fill';
+        strengthText.textContent = '';
+        strengthText.className = 'strength-text';
+        return null;
+    }
+
+    let strength = 0;
+
+    // Length check
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+
+    // Character variety checks
+    if (/[a-z]/.test(password)) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+    // Determine strength level
+    if (strength < 3) {
+        strengthFill.className = 'strength-fill weak';
+        strengthText.className = 'strength-text weak';
+        strengthText.textContent = 'Weak';
+        return 'weak';
+    } else if (strength < 5) {
+        strengthFill.className = 'strength-fill medium';
+        strengthText.className = 'strength-text medium';
+        strengthText.textContent = 'Medium';
+        return 'medium';
+    } else {
+        strengthFill.className = 'strength-fill strong';
+        strengthText.className = 'strength-text strong';
+        strengthText.textContent = 'Strong';
+        return 'strong';
+    }
+}
+
+passwordInput.addEventListener('input', (e) => {
+    checkPasswordStrength(e.target.value);
+});
+
+// ========================================
+// PASSWORD MATCHING VALIDATION
+// ========================================
+
+const passwordMatchMessage = document.getElementById('password-match');
+
+function checkPasswordMatch() {
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (!confirmPassword) {
+        passwordMatchMessage.textContent = '';
+        passwordMatchMessage.className = 'password-match-message';
+        return true;
+    }
+
+    if (password === confirmPassword) {
+        passwordMatchMessage.textContent = '✓ Passwords match';
+        passwordMatchMessage.className = 'password-match-message match';
+        return true;
+    } else {
+        passwordMatchMessage.textContent = '✗ Passwords do not match';
+        passwordMatchMessage.className = 'password-match-message no-match';
+        return false;
+    }
+}
+
+confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+passwordInput.addEventListener('input', checkPasswordMatch);
+
+// ========================================
 // ACCOMMODATION TOGGLE
 // ========================================
 
@@ -124,12 +223,32 @@ const registerForm = document.getElementById('register-form');
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    // Get password values
+    const email = document.getElementById('email').value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    // Validate password strength
+    const strength = checkPasswordStrength(password);
+    if (!strength || strength === 'weak') {
+        alert('Please use a stronger password. Your password should be at least 8 characters long and include uppercase, lowercase, and numbers.');
+        return;
+    }
+
+    // Validate password match
+    if (password !== confirmPassword) {
+        alert('Passwords do not match. Please check and try again.');
+        return;
+    }
+
     const accommodationRequired = document.querySelector('input[name="accommodation"]:checked')?.value === 'yes';
 
     const formData = {
+        email: email,
         teamName: document.getElementById('team-name').value,
         teamLead: document.getElementById('team-lead').value,
-        email: document.getElementById('email').value,
+        university: document.getElementById('university').value,
+        department: document.getElementById('department').value,
         phone: document.getElementById('phone').value,
         teamSize: document.getElementById('team-size').value,
         accommodation: {
@@ -141,14 +260,38 @@ registerForm.addEventListener('submit', (e) => {
         projectTitle: document.getElementById('project-title').value,
         category: document.getElementById('category').value,
         description: document.getElementById('description').value,
+        problemSolved: document.getElementById('problem-solved').value,
         techStack: document.getElementById('tech-stack').value,
         projectUrl: document.getElementById('project-url').value,
         videoUrl: document.getElementById('video-url').value,
     };
 
+    // Store credentials in localStorage (FOR DEVELOPMENT ONLY!)
+    const credentials = {
+        email: email,
+        password: password, // WARNING: Plain text password - NOT SECURE!
+        registrationData: formData,
+        registeredAt: new Date().toISOString()
+    };
+
+    // Get existing users or create new array
+    let users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
+
+    // Check if email already exists
+    const existingUserIndex = users.findIndex(u => u.email === email);
+    if (existingUserIndex >= 0) {
+        // Update existing user
+        users[existingUserIndex] = credentials;
+    } else {
+        // Add new user
+        users.push(credentials);
+    }
+
+    localStorage.setItem('codeAndBeyondUsers', JSON.stringify(users));
+
     console.log('Registration submitted:', formData);
 
     // Show success message and redirect
-    alert('Registration submitted successfully! You will receive a confirmation email shortly.');
+    alert('Registration submitted successfully! You can now login with your credentials.');
     window.location.href = 'login.html';
 });

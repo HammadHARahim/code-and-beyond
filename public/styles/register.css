@@ -223,6 +223,180 @@ body {
 }
 
 /* ========================================
+   PASSWORD INPUT
+   ======================================== */
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-input-wrapper .form-input {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 6px;
+    color: rgba(0, 212, 255, 0.6);
+    cursor: pointer;
+    padding: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+}
+
+.password-toggle:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
+    color: var(--color-cyan);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.2);
+}
+
+.password-toggle:active {
+    background: rgba(0, 212, 255, 0.15);
+    transform: translateY(-50%) scale(0.95);
+}
+
+.password-toggle .eye-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Password Strength Indicator */
+.password-strength {
+    margin-top: 0.75rem;
+    width: 100%;
+}
+
+.strength-bar {
+    height: 6px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: all var(--transition-base);
+    border-radius: 3px;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.strength-fill.weak {
+    width: 33%;
+    background: linear-gradient(90deg, #ff4444, #ff6666);
+}
+
+.strength-fill.medium {
+    width: 66%;
+    background: linear-gradient(90deg, #ffaa00, #ffcc00);
+}
+
+.strength-fill.strong {
+    width: 100%;
+    background: linear-gradient(90deg, #00ff88, #00ffaa);
+}
+
+.strength-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+}
+
+.strength-text.weak {
+    color: #ff6666;
+    text-shadow: 0 0 4px rgba(255, 68, 68, 0.3);
+}
+
+.strength-text.medium {
+    color: #ffcc00;
+    text-shadow: 0 0 4px rgba(255, 170, 0, 0.3);
+}
+
+.strength-text.strong {
+    color: #00ffaa;
+    text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+}
+
+/* Password Match Message */
+.password-match-message {
+    font-size: 0.75rem;
+    margin-top: 0.75rem;
+    font-weight: 500;
+    display: block;
+    width: 100%;
+}
+
+.password-match-message.match {
+    color: #00ffaa;
+    text-shadow: 0 0 4px rgba(0, 255, 170, 0.3);
+}
+
+.password-match-message.no-match {
+    color: #ff6666;
+    text-shadow: 0 0 4px rgba(255, 68, 68, 0.3);
+}
+
+/* ========================================
+   INFORMATIONAL NOTES
+   ======================================== */
+
+.section-note {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.875rem;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.field-note {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 8px;
+}
+
+.field-note-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--color-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.field-note-icon svg {
+    filter: drop-shadow(0 0 4px var(--color-cyan-glow));
+}
+
+.field-note-text {
+    flex: 1;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
+/* ========================================
    FILE UPLOAD
    ======================================== */
 
@@ -299,7 +473,7 @@ body {
     padding: var(--spacing-md);
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -307,6 +481,13 @@ body {
 .radio-option:hover {
     background: rgba(0, 212, 255, 0.05);
     border-color: rgba(0, 212, 255, 0.3);
+    transform: translateX(2px);
+}
+
+.radio-option:has(input[type="radio"]:checked) {
+    background: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
 }
 
 .radio-option input[type="radio"] {
@@ -316,7 +497,7 @@ body {
     accent-color: var(--color-cyan);
 }
 
-.radio-option input[type="radio"]:checked + .radio-label {
+.radio-option input[type="radio"]:checked+.radio-label {
     color: var(--color-cyan);
     font-weight: 500;
 }
@@ -349,6 +530,7 @@ body {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -479,6 +661,28 @@ body {
 
     .form-row {
         grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    /* Ensure password fields stack properly on mobile */
+    .form-section .form-row .form-group {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .password-input-wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .password-input-wrapper .form-input {
+        width: 100%;
+    }
+
+    .password-strength,
+    .password-match-message {
+        width: 100%;
+        max-width: 100%;
     }
 
     .btn-primary {
