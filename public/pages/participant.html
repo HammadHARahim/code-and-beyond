@@ -14,8 +14,11 @@
     <link rel="stylesheet" href="../styles/scrollbar.css">
     <link rel="stylesheet" href="../styles/participant.css">
 
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Participant Route Guard - Must be loaded first -->
-    <script src="../scripts/participant-guard.js"></script>
+    <script type="module" src="../scripts/participant-guard.js"></script>
 </head>
 
 <body>
@@ -253,7 +256,7 @@
         </div>
     </main>
 
-    <script src="../scripts/participant.js"></script>
+    <script type="module" src="../scripts/participant.js"></script>
 </body>
 
 </html>

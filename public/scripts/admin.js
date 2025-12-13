@@ -1,6 +1,8 @@
 // ========================================
-// ADMIN PANEL - INITIALIZATION
+// ADMIN PANEL - SUPABASE VERSION
 // ========================================
+
+import { supabase } from './supabase-client.js';
 
 let allParticipants = [];
 let filteredParticipants = [];
@@ -41,25 +43,68 @@ function initializeNavigation() {
 
 
 // ========================================
-// LOAD PARTICIPANTS DATA
+// LOAD PARTICIPANTS DATA FROM SUPABASE
 // ========================================
 
-function loadParticipants() {
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
-    allParticipants = users.map(user => ({
-        email: user.email,
-        status: user.status || 'pending',
-        rejectionReason: user.rejectionReason || '',
-        adminNotes: user.adminNotes || '',
-        statusUpdatedAt: user.statusUpdatedAt || '',
-        ...user.registrationData,
-        registeredAt: user.registeredAt
-    }));
+async function loadParticipants() {
+    try {
+        // Show loading state
+        const tbody = document.getElementById('participants-tbody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem;">Loading participants...</td></tr>';
+        }
 
-    filteredParticipants = [...allParticipants];
+        // Fetch participants from Supabase
+        const { data, error } = await supabase
+            .from('participants')
+            .select('*')
+            .order('submitted_at', { ascending: false });
 
-    updateStatistics();
-    populateTable();
+        if (error) {
+            console.error('Error loading participants:', error);
+            if (tbody) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:#ff4444;">Error loading participants: ${error.message}</td></tr>`;
+            }
+            return;
+        }
+
+        // Map Supabase data to our format
+        allParticipants = (data || []).map(p => ({
+            id: p.id,
+            userId: p.user_id,
+            email: '', // We'll need to get this from auth.users if needed
+            status: p.status,
+            rejectionReason: p.rejection_reason,
+            teamName: p.team_name,
+            teamLead: p.team_lead,
+            university: p.university,
+            department: p.department,
+            phone: p.phone,
+            teamSize: p.team_size,
+            projectTitle: p.project_title,
+            category: p.project_category,
+            projectDescription: p.project_description,
+            problemSolved: p.problem_solved,
+            techStack: p.tech_stack,
+            projectUrl: p.project_url,
+            videoUrl: p.video_url,
+            accommodation: {
+                required: p.accommodation_needed,
+                type: p.accommodation_type,
+                duration: p.accommodation_duration
+            },
+            registeredAt: p.submitted_at
+        }));
+
+        filteredParticipants = [...allParticipants];
+
+        updateStatistics();
+        populateTable();
+
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        alert('Failed to load participants. Please refresh the page.');
+    }
 }
 
 function updateStatistics() {
@@ -86,7 +131,7 @@ function populateTable() {
         tbody.innerHTML = `
             <tr>
                 <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255, 255, 255, 0.5);">
-                    No participants found
+                    No participants found. Registrations will appear here.
                 </td>
             </tr>
         `;
@@ -95,14 +140,14 @@ function populateTable() {
 
     filteredParticipants.forEach((participant, index) => {
         const row = document.createElement('tr');
-        row.dataset.email = participant.email;
+        row.dataset.id = participant.id;
 
         const statusBadge = getStatusBadge(participant.status);
         const formattedDate = formatDate(participant.registeredAt);
 
         row.innerHTML = `
             <td>
-                <input type="checkbox" class="table-checkbox row-checkbox" data-email="${participant.email}" />
+                <input type="checkbox" class="table-checkbox row-checkbox" data-id="${participant.id}" />
             </td>
             <td>#${String(index + 1).padStart(3, '0')}</td>
             <td>${participant.teamLead || 'N/A'}</td>
@@ -111,31 +156,26 @@ function populateTable() {
             <td>${formattedDate}</td>
             <td>${statusBadge}</td>
             <td>
-                <button class="btn-table-action" onclick="viewParticipant('${participant.email}')" title="View">
+                <button class="btn-table-action" onclick="viewParticipant('${participant.id}')" title="View">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
                             stroke="currentColor" stroke-width="2" />
                         <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
                     </svg>
                 </button>
-                <button class="btn-table-action" onclick="openEditModal('${participant.email}')" title="Edit">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                </button>
                 ${participant.status === 'pending' ? `
-                    <button class="btn-table-action btn-approve" onclick="approveParticipant('${participant.email}')" title="Approve">
+                    <button class="btn-table-action btn-approve" onclick="approveParticipant('${participant.id}')" title="Approve">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M3 8L6 11L13 4" stroke="currentColor" stroke-width="2" />
                         </svg>
                     </button>
-                    <button class="btn-table-action btn-reject" onclick="showRejectModal('${participant.email}')" title="Reject">
+                    <button class="btn-table-action btn-reject" onclick="showRejectModal('${participant.id}')" title="Reject">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="2" />
                         </svg>
                     </button>
                 ` : ''}
-                <button class="btn-table-action btn-delete" onclick="deleteParticipant('${participant.email}')" title="Delete">
+                <button class="btn-table-action btn-delete" onclick="deleteParticipant('${participant.id}')" title="Delete">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M2 4H14M5 4V2H11V4M6 7V11M10 7V11" stroke="currentColor" stroke-width="2"/>
                         <path d="M4 4H12V14H4V4Z" stroke="currentColor" stroke-width="2"/>
@@ -178,314 +218,40 @@ function formatDate(dateString) {
 }
 
 // ========================================
-// APPROVE/REJECT FUNCTIONS
+// APPROVE/REJECT FUNCTIONS - SUPABASE
 // ========================================
 
-function approveParticipant(email) {
-    if (confirm('Approve this participant?')) {
-        updateParticipantStatus(email, 'approved', '');
-    }
-}
+async function approveParticipant(id) {
+    if (!confirm('Approve this participant?')) return;
 
-function showRejectModal(email) {
-    const modal = document.getElementById('reject-modal');
-    if (modal) {
-        modal.dataset.email = email;
-        modal.dataset.bulk = 'false'; // Ensure it's not bulk mode
-        modal.style.display = 'flex';
-    }
-}
+    try {
+        const { data: { user } } = await supabase.auth.getUser();
 
-// ========================================
-// EVENT LISTENERS
-// ========================================
+        const { error } = await supabase
+            .from('participants')
+            .update({
+                status: 'approved',
+                reviewed_at: new Date().toISOString(),
+                reviewed_by: user.id
+            })
+            .eq('id', id);
 
-function initializeEventListeners() {
-    window.addEventListener('click', (e) => {
-        const rejectModal = document.getElementById('reject-modal');
-        if (rejectModal && e.target === rejectModal) {
-            closeRejectModal();
+        if (error) {
+            console.error('Error approving participant:', error);
+            alert(`Error: ${error.message}`);
+            return;
         }
-    });
 
-    // Search input
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            applyFilters();
-        });
-    }
+        alert('Participant approved!');
+        loadParticipants(); // Reload data
 
-    // Status filter
-    const statusFilter = document.getElementById('status-filter');
-    if (statusFilter) {
-        statusFilter.addEventListener('change', () => {
-            applyFilters();
-        });
-    }
-
-    // Category filter
-    const categoryFilter = document.getElementById('category-filter');
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', () => {
-            applyFilters();
-        });
-    }
-
-    // Clear filters button
-    const clearFiltersBtn = document.getElementById('clear-filters');
-    if (clearFiltersBtn) {
-        clearFiltersBtn.addEventListener('click', () => {
-            clearFilters();
-        });
-    }
-
-    // Edit form submit
-    const editForm = document.getElementById('edit-form');
-    if (editForm) {
-        editForm.addEventListener('submit', saveParticipantEdits);
-    }
-
-    // Close modals on outside click
-    window.addEventListener('click', (e) => {
-        const editModal = document.getElementById('edit-modal');
-        const deleteModal = document.getElementById('delete-modal');
-        const detailModal = document.getElementById('detail-modal');
-
-        if (e.target === editModal) closeEditModal();
-        if (e.target === deleteModal) closeDeleteModal();
-        if (e.target === detailModal) closeDetailModal();
-    });
-
-    // Export button
-    const exportBtn = document.getElementById('export-btn');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            exportToCSV();
-        });
-    }
-
-    // Select all checkbox
-    const selectAllCheckbox = document.getElementById('select-all');
-    if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', (e) => {
-            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-            rowCheckboxes.forEach(checkbox => {
-                checkbox.checked = e.target.checked;
-            });
-            updateBulkActionsVisibility();
-        });
-    }
-
-    // Row checkboxes (delegated)
-    document.addEventListener('change', (e) => {
-        if (e.target.classList.contains('row-checkbox')) {
-            updateBulkActionsVisibility();
-        }
-    });
-}
-
-function updateBulkActionsVisibility() {
-    const selected = getSelectedEmails();
-    const bulkActions = document.getElementById('bulk-actions');
-    const bulkCount = document.getElementById('bulk-selected-count');
-
-    if (selected.length > 0) {
-        bulkActions.style.display = 'flex';
-        bulkCount.textContent = `${selected.length} selected`;
-    } else {
-        bulkActions.style.display = 'none';
-    }
-
-    // Update select-all checkbox state
-    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-    const selectAllCheckbox = document.getElementById('select-all');
-    if (selectAllCheckbox && rowCheckboxes.length > 0) {
-        const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
-        selectAllCheckbox.checked = allChecked;
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        alert('Failed to approve participant.');
     }
 }
 
-function getSelectedEmails() {
-    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
-    return Array.from(checkboxes).map(cb => cb.dataset.email);
-}
-
-function clearSelections() {
-    document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = false);
-    const selectAll = document.getElementById('select-all');
-    if (selectAll) selectAll.checked = false;
-    updateBulkActionsVisibility();
-}
-
-// ========================================
-// EXPORT TO CSV
-// ========================================
-
-function exportToCSV() {
-    const dataToExport = filteredParticipants.length > 0 ? filteredParticipants : allParticipants;
-
-    if (dataToExport.length === 0) {
-        alert('No data to export');
-        return;
-    }
-
-    // CSV Headers
-    const headers = [
-        'ID',
-        'Email',
-        'Status',
-        'Team Name',
-        'Team Lead',
-        'University',
-        'Department',
-        'Phone',
-        'Team Size',
-        'Project Title',
-        'Category',
-        'Tech Stack',
-        'Problem Solved',
-        'Project URL',
-        'Video URL',
-        'Accommodation Required',
-        'Accommodation Type',
-        'Accommodation Duration',
-        'Registered Date'
-    ];
-
-    // Convert data to CSV rows
-    const rows = dataToExport.map((participant, index) => {
-        return [
-            `#${String(index + 1).padStart(3, '0')}`,
-            participant.email || '',
-            participant.status || 'pending',
-            participant.teamName || '',
-            participant.teamLead || '',
-            participant.university || '',
-            participant.department || '',
-            participant.phone || '',
-            participant.teamSize || '',
-            participant.projectTitle || '',
-            formatCategory(participant.category) || '',
-            participant.techStack || '',
-            participant.problemSolved || '',
-            participant.projectUrl || '',
-            participant.videoUrl || '',
-            participant.accommodation?.required ? 'Yes' : 'No',
-            participant.accommodation?.type || '',
-            participant.accommodation?.duration || '',
-            formatDate(participant.registeredAt) || ''
-        ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(',');
-    });
-
-    // Combine headers and rows
-    const csvContent = [
-        headers.map(h => `"${h}"`).join(','),
-        ...rows
-    ].join('\n');
-
-    // Create blob and download
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-
-    const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `participants_export_${timestamp}.csv`;
-
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    link.style.visibility = 'hidden';
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    const count = dataToExport.length;
-    const filterActive = count < allParticipants.length;
-    const message = filterActive
-        ? `Exported ${count} filtered participants to ${filename}`
-        : `Exported all ${count} participants to ${filename}`;
-
-    alert(message);
-}
-
-// ========================================
-// BULK OPERATIONS
-// ========================================
-
-function bulkApprove() {
-    const emails = getSelectedEmails();
-    if (emails.length === 0) return;
-
-    if (!confirm(`Approve ${emails.length} participants?`)) return;
-
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
-
-    emails.forEach(email => {
-        const userIndex = users.findIndex(u => u.email === email);
-        if (userIndex >= 0) {
-            users[userIndex].status = 'approved';
-            users[userIndex].statusUpdatedAt = new Date().toISOString();
-        }
-    });
-
-    localStorage.setItem('codeAndBeyondUsers', JSON.stringify(users));
-    loadParticipants();
-    clearSelections();
-    alert(`${emails.length} participants approved!`);
-}
-
-function showBulkRejectModal() {
-    const emails = getSelectedEmails();
-    if (emails.length === 0) return;
-
-    const modal = document.getElementById('reject-modal');
-    if (modal) {
-        modal.dataset.emails = JSON.stringify(emails);
-        modal.dataset.bulk = 'true';
-        modal.style.display = 'flex';
-
-        const subtitle = modal.querySelector('.modal-subtitle');
-        if (subtitle) {
-            subtitle.textContent = `Rejecting ${emails.length} participants. Provide a reason (visible to all selected participants)`;
-        }
-    }
-}
-
-function bulkDelete() {
-    const emails = getSelectedEmails();
-    if (emails.length === 0) return;
-
-    if (!confirm(`Delete ${emails.length} participants? This cannot be undone.`)) return;
-
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
-    const filteredUsers = users.filter(u => !emails.includes(u.email));
-
-    localStorage.setItem('codeAndBeyondUsers', JSON.stringify(filteredUsers));
-    loadParticipants();
-    clearSelections();
-    alert(`${emails.length} participants deleted!`);
-}
-
-// Helper function for updating participant status
-function updateParticipantStatus(email, status, reason) {
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
-    const userIndex = users.findIndex(u => u.email === email);
-
-    if (userIndex >= 0) {
-        users[userIndex].status = status;
-        users[userIndex].rejectionReason = reason;
-        users[userIndex].statusUpdatedAt = new Date().toISOString();
-
-        localStorage.setItem('codeAndBeyondUsers', JSON.stringify(users));
-        loadParticipants();
-
-        alert(`Participant ${status}!`);
-    }
-}
-
-// Unified rejectParticipant function (handles both single and bulk)
-function rejectParticipant() {
+async function rejectParticipant() {
     const modal = document.getElementById('reject-modal');
     const reasonInput = document.getElementById('rejection-reason');
     if (!modal || !reasonInput) return;
@@ -497,203 +263,67 @@ function rejectParticipant() {
         return;
     }
 
-    const isBulk = modal.dataset.bulk === 'true';
+    const id = modal.dataset.id;
 
-    if (isBulk) {
-        const emails = JSON.parse(modal.dataset.emails || '[]');
-        const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
+    try {
+        const { data: { user } } = await supabase.auth.getUser();
 
-        emails.forEach(email => {
-            const userIndex = users.findIndex(u => u.email === email);
-            if (userIndex >= 0) {
-                users[userIndex].status = 'rejected';
-                users[userIndex].rejectionReason = reason;
-                users[userIndex].statusUpdatedAt = new Date().toISOString();
-            }
-        });
+        const { error } = await supabase
+            .from('participants')
+            .update({
+                status: 'rejected',
+                rejection_reason: reason,
+                reviewed_at: new Date().toISOString(),
+                reviewed_by: user.id
+            })
+            .eq('id', id);
 
-        localStorage.setItem('codeAndBeyondUsers', JSON.stringify(users));
+        if (error) {
+            console.error('Error rejecting participant:', error);
+            alert(`Error: ${error.message}`);
+            return;
+        }
+
+        alert('Participant rejected');
+        closeRejectModal();
         loadParticipants();
-        clearSelections();
-        alert(`${emails.length} participants rejected!`);
-    } else {
-        const email = modal.dataset.email;
-        updateParticipantStatus(email, 'rejected', reason);
-    }
 
-    closeRejectModal();
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        alert('Failed to reject participant.');
+    }
+}
+
+function showRejectModal(id) {
+    const modal = document.getElementById('reject-modal');
+    if (modal) {
+        modal.dataset.id = id;
+        modal.style.display = 'flex';
+    }
 }
 
 function closeRejectModal() {
     const modal = document.getElementById('reject-modal');
     const reasonInput = document.getElementById('rejection-reason');
-    const subtitle = modal?.querySelector('.modal-subtitle');
 
     if (modal) {
         modal.style.display = 'none';
-        modal.dataset.bulk = 'false';
-        modal.dataset.emails = '[]';
+        modal.dataset.id = '';
     }
     if (reasonInput) reasonInput.value = '';
-    if (subtitle) subtitle.textContent = 'Please provide a reason for rejection (visible to participant)';
 }
 
 // ========================================
-// SEARCH AND FILTER FUNCTIONS
+// DELETE PARTICIPANT - SUPABASE
 // ========================================
 
-function applyFilters() {
-    const searchQuery = document.getElementById('search-input')?.value.toLowerCase() || '';
-    const statusFilter = document.getElementById('status-filter')?.value || '';
-    const categoryFilter = document.getElementById('category-filter')?.value || '';
+let currentDeleteId = '';
 
-    filteredParticipants = allParticipants.filter(participant => {
-        // Search filter
-        const matchesSearch = !searchQuery ||
-            (participant.teamLead && participant.teamLead.toLowerCase().includes(searchQuery)) ||
-            (participant.email && participant.email.toLowerCase().includes(searchQuery)) ||
-            (participant.projectTitle && participant.projectTitle.toLowerCase().includes(searchQuery)) ||
-            (participant.university && participant.university.toLowerCase().includes(searchQuery)) ||
-            (participant.teamName && participant.teamName.toLowerCase().includes(searchQuery));
-
-        // Status filter
-        const matchesStatus = !statusFilter || participant.status === statusFilter;
-
-        // Category filter
-        const matchesCategory = !categoryFilter || participant.category === categoryFilter;
-
-        return matchesSearch && matchesStatus && matchesCategory;
-    });
-
-    populateTable();
-    updateFilterCount();
-}
-
-function clearFilters() {
-    const searchInput = document.getElementById('search-input');
-    const statusFilter = document.getElementById('status-filter');
-    const categoryFilter = document.getElementById('category-filter');
-
-    if (searchInput) searchInput.value = '';
-    if (statusFilter) statusFilter.value = '';
-    if (categoryFilter) categoryFilter.value = '';
-
-    applyFilters();
-}
-
-function updateFilterCount() {
-    const titleElement = document.querySelector('.section-title');
-    if (titleElement) {
-        const count = filteredParticipants.length;
-        const total = allParticipants.length;
-
-        if (count < total) {
-            titleElement.textContent = `Registered Participants (${count} of ${total})`;
-        } else {
-            titleElement.textContent = 'Registered Participants';
-        }
-    }
-}
-
-// ========================================
-// Make functions globally available
-// ========================================
-window.viewParticipant = viewParticipant;
-window.approveParticipant = approveParticipant;
-window.showRejectModal = showRejectModal;
-window.rejectParticipant = rejectParticipant;
-window.closeRejectModal = closeRejectModal;
-window.applyFilters = applyFilters;
-window.clearFilters = clearFilters;
-window.updateFilterCount = updateFilterCount;
-window.openEditModal = openEditModal;
-window.closeEditModal = closeEditModal;
-window.saveParticipantEdits = saveParticipantEdits;
-window.deleteParticipant = deleteParticipant;
-window.closeDeleteModal = closeDeleteModal;
-window.confirmDelete = confirmDelete;
-window.exportToCSV = exportToCSV;
-window.closeDetailModal = closeDetailModal;
-window.bulkApprove = bulkApprove;
-window.showBulkRejectModal = showBulkRejectModal;
-window.bulkDelete = bulkDelete;
-window.getSelectedEmails = getSelectedEmails;
-window.clearSelections = clearSelections;
-window.updateBulkActionsVisibility = updateBulkActionsVisibility;
-
-// ========================================
-// EDIT PARTICIPANT FUNCTIONALITY
-// ========================================
-
-let currentEditEmail = '';
-
-function openEditModal(email) {
-    const participant = allParticipants.find(p => p.email === email);
+async function deleteParticipant(id) {
+    const participant = allParticipants.find(p => p.id === id);
     if (!participant) return;
 
-    currentEditEmail = email;
-    const modal = document.getElementById('edit-modal');
-
-    // Pre-fill form with current data
-    document.getElementById('edit-team-name').value = participant.teamName || '';
-    document.getElementById('edit-team-lead').value = participant.teamLead || '';
-    document.getElementById('edit-university').value = participant.university || '';
-    document.getElementById('edit-department').value = participant.department || '';
-    document.getElementById('edit-phone').value = participant.phone || '';
-    document.getElementById('edit-team-size').value = participant.teamSize || '';
-    document.getElementById('edit-project-title').value = participant.projectTitle || '';
-    document.getElementById('edit-category').value = participant.category || '';
-
-    if (modal) modal.style.display = 'flex';
-}
-
-function closeEditModal() {
-    const modal = document.getElementById('edit-modal');
-    if (modal) modal.style.display = 'none';
-    currentEditEmail = '';
-}
-
-function saveParticipantEdits(e) {
-    e.preventDefault();
-
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
-    const userIndex = users.findIndex(u => u.email === currentEditEmail);
-
-    if (userIndex < 0) {
-        alert('Participant not found!');
-        return;
-    }
-
-    // Update participant data
-    users[userIndex].registrationData = {
-        ...users[userIndex].registrationData,
-        teamName: document.getElementById('edit-team-name').value,
-        teamLead: document.getElementById('edit-team-lead').value,
-        university: document.getElementById('edit-university').value,
-        department: document.getElementById('edit-department').value,
-        phone: document.getElementById('edit-phone').value,
-        teamSize: document.getElementById('edit-team-size').value,
-        projectTitle: document.getElementById('edit-project-title').value,
-        category: document.getElementById('edit-category').value
-    };
-
-    localStorage.setItem('codeAndBeyondUsers', JSON.stringify(users));
-    loadParticipants();
-    closeEditModal();
-    alert('Participant updated successfully!');
-}
-
-// ========================================
-// DELETE PARTICIPANT FUNCTIONALITY
-// ========================================
-
-let currentDeleteEmail = '';
-
-function deleteParticipant(email) {
-    const participant = allParticipants.find(p => p.email === email);
-    if (!participant) return;
-
-    currentDeleteEmail = email;
+    currentDeleteId = id;
     const modal = document.getElementById('delete-modal');
 
     // Show participant info in delete modal
@@ -706,25 +336,38 @@ function deleteParticipant(email) {
 function closeDeleteModal() {
     const modal = document.getElementById('delete-modal');
     if (modal) modal.style.display = 'none';
-    currentDeleteEmail = '';
+    currentDeleteId = '';
 }
 
-function confirmDelete() {
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
-    const filteredUsers = users.filter(u => u.email !== currentDeleteEmail);
+async function confirmDelete() {
+    try {
+        const { error } = await supabase
+            .from('participants')
+            .delete()
+            .eq('id', currentDeleteId);
 
-    localStorage.setItem('codeAndBeyondUsers', JSON.stringify(filteredUsers));
-    loadParticipants();
-    closeDeleteModal();
-    alert('Participant deleted successfully!');
+        if (error) {
+            console.error('Error deleting participant:', error);
+            alert(`Error: ${error.message}`);
+            return;
+        }
+
+        closeDeleteModal();
+        alert('Participant deleted successfully!');
+        loadParticipants();
+
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        alert('Failed to delete participant.');
+    }
 }
 
 // ========================================
 // VIEW PARTICIPANT DETAILS
 // ========================================
 
-function viewParticipant(email) {
-    const participant = allParticipants.find(p => p.email === email);
+function viewParticipant(id) {
+    const participant = allParticipants.find(p => p.id === id);
     if (!participant) return;
 
     // Status
@@ -751,7 +394,7 @@ function viewParticipant(email) {
     document.getElementById('detail-phone').textContent = participant.phone || 'N/A';
     document.getElementById('detail-university').textContent = participant.university || 'N/A';
     document.getElementById('detail-department').textContent = participant.department || 'N/A';
-    document.getElementById('detail-team-size').textContent = participant.teamSize ? `${participant.teamSize} ${participant.teamSize === '1' ? 'Member' : 'Members'}` : 'N/A';
+    document.getElementById('detail-team-size').textContent = participant.teamSize ? `${participant.teamSize} ${participant.teamSize === 1 ? 'Member' : 'Members'}` : 'N/A';
 
     // Project Details
     document.getElementById('detail-project-title').textContent = participant.projectTitle || 'N/A';
@@ -798,4 +441,112 @@ function closeDetailModal() {
     if (modal) modal.style.display = 'none';
 }
 
-console.log('Admin panel loaded');
+// ========================================
+// SEARCH AND FILTER
+// ========================================
+
+function applyFilters() {
+    const searchQuery = document.getElementById('search-input')?.value.toLowerCase() || '';
+    const statusFilter = document.getElementById('status-filter')?.value || '';
+    const categoryFilter = document.getElementById('category-filter')?.value || '';
+
+    filteredParticipants = allParticipants.filter(participant => {
+        // Search filter
+        const matchesSearch = !searchQuery ||
+            (participant.teamLead && participant.teamLead.toLowerCase().includes(searchQuery)) ||
+            (participant.projectTitle && participant.projectTitle.toLowerCase().includes(searchQuery)) ||
+            (participant.university && participant.university.toLowerCase().includes(searchQuery)) ||
+            (participant.teamName && participant.teamName.toLowerCase().includes(searchQuery));
+
+        // Status filter
+        const matchesStatus = !statusFilter || participant.status === statusFilter;
+
+        // Category filter
+        const matchesCategory = !categoryFilter || participant.category === categoryFilter;
+
+        return matchesSearch && matchesStatus && matchesCategory;
+    });
+
+    populateTable();
+    updateFilterCount();
+}
+
+function clearFilters() {
+    const searchInput = document.getElementById('search-input');
+    const statusFilter = document.getElementById('status-filter');
+    const categoryFilter = document.getElementById('category-filter');
+
+    if (searchInput) searchInput.value = '';
+    if (statusFilter) statusFilter.value = '';
+    if (categoryFilter) categoryFilter.value = '';
+
+    applyFilters();
+}
+
+function updateFilterCount() {
+    const titleElement = document.querySelector('.section-title');
+    if (titleElement) {
+        const count = filteredParticipants.length;
+        const total = allParticipants.length;
+
+        if (count < total) {
+            titleElement.textContent = `Registered Participants (${count} of ${total})`;
+        } else {
+            titleElement.textContent = 'Registered Participants';
+        }
+    }
+}
+
+// ========================================
+// EVENT LISTENERS
+// ========================================
+
+function initializeEventListeners() {
+    // Search input
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => applyFilters());
+    }
+
+    // Status filter
+    const statusFilter = document.getElementById('status-filter');
+    if (statusFilter) {
+        statusFilter.addEventListener('change', () => applyFilters());
+    }
+
+    // Category filter
+    const categoryFilter = document.getElementById('category-filter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', () => applyFilters());
+    }
+
+    // Clear filters
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', () => clearFilters());
+    }
+
+    // Close modals on outside click
+    window.addEventListener('click', (e) => {
+        const rejectModal = document.getElementById('reject-modal');
+        const deleteModal = document.getElementById('delete-modal');
+        const detailModal = document.getElementById('detail-modal');
+
+        if (e.target === rejectModal) closeRejectModal();
+        if (e.target === deleteModal) closeDeleteModal();
+        if (e.target === detailModal) closeDetailModal();
+    });
+}
+
+// ========================================
+// Make functions globally available
+// ========================================
+window.viewParticipant = viewParticipant;
+window.approveParticipant = approveParticipant;
+window.showRejectModal = showRejectModal;
+window.rejectParticipant = rejectParticipant;
+window.closeRejectModal = closeRejectModal;
+window.deleteParticipant = deleteParticipant;
+window.closeDeleteModal = closeDeleteModal;
+window.confirmDelete = confirmDelete;
+window.closeDetailModal = closeDetailModal;

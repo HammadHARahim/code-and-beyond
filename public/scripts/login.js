@@ -75,61 +75,62 @@ togglePasswordBtn.addEventListener('click', () => {
     passwordInput.setAttribute('type', type);
 });
 
+// Import Supabase client
+import { supabase } from './supabase-client.js';
+
 // Login Form Handler
 const loginForm = document.getElementById('login-form');
 
-loginForm.addEventListener('submit', (e) => {
+loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
-    const role = document.querySelector('input[name="role"]:checked').value;
+    const selectedRole = document.querySelector('input[name="role"]:checked').value;
 
-    // Hardcoded admin credentials (for development only - use backend auth in production)
-    // Credentials from admin-credentials.json
-    const ADMIN_EMAIL = 'admin@codebeyond.event';
-    const ADMIN_PASSWORD = 'CodeBeyond2025!';
+    try {
+        // Sign in with Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
 
-    // Check if trying to login as admin
-    if (role === 'admin') {
-        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-            // Admin login successful
-            localStorage.setItem('currentUser', JSON.stringify({
-                email: ADMIN_EMAIL,
-                role: 'admin',
-                loginTime: new Date().toISOString()
-            }));
-            console.log('Admin login successful');
-            window.location.href = 'admin.html';
-            return;
-        } else {
-            alert('Invalid admin credentials. Please check your email and password.');
+        if (error) {
+            if (error.message.includes('Invalid login credentials')) {
+                alert('Invalid email or password. Please try again.');
+            } else {
+                alert(`Login failed: ${error.message}`);
+            }
             return;
         }
+
+        // Get user metadata to check role
+        const userRole = data.user.user_metadata?.role || 'participant';
+
+        // Verify role matches selection
+        if (selectedRole === 'admin' && userRole !== 'admin') {
+            alert('You do not have admin privileges. Please login as a participant.');
+            await supabase.auth.signOut();
+            return;
+        }
+
+        if (selectedRole === 'participant' && userRole === 'admin') {
+            alert('Admin accounts cannot login as participants. Please select Admin role.');
+            await supabase.auth.signOut();
+            return;
+        }
+
+        // Successful login - redirect based on role
+        console.log(`${userRole} login successful:`, data.user.email);
+
+        if (userRole === 'admin') {
+            window.location.href = 'admin.html';
+        } else {
+            window.location.href = 'participant.html';
+        }
+
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('An unexpected error occurred. Please try again.');
     }
-
-    // Regular participant login
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
-    const user = users.find(u => u.email === email);
-
-    // Validate credentials
-    if (!user) {
-        alert('Email not found. Please register first or check your email address.');
-        return;
-    }
-
-    if (user.password !== password) {
-        alert('Incorrect password. Please try again.');
-        return;
-    }
-
-    // Store current session
-    localStorage.setItem('currentUser', JSON.stringify({
-        email: user.email,
-        role: 'participant',
-        loginTime: new Date().toISOString()
-    }));
-
-    console.log('Participant login successful:', { email });
-    window.location.href = 'participant.html';
 });

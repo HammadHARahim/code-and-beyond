@@ -15,8 +15,11 @@
     <link rel="stylesheet" href="../styles/admin.css">
     <link rel="stylesheet" href="../styles/admin-fixes.css">
 
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Admin Route Guard - Must be loaded first -->
-    <script src="../scripts/admin-guard.js"></script>
+    <script type="module" src="../scripts/admin-guard.js"></script>
 </head>
 
 <body>
@@ -437,7 +440,7 @@
         </div>
     </div>
 
-    <script src="../scripts/admin.js"></script>
+    <script type="module" src="../scripts/admin.js"></script>
     <script src="../scripts/logout.js"></script>
 </body>
 

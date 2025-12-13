@@ -1,0 +1,24 @@
+{
+  "name": "code-and-beyond",
+  "version": "1.0.0",
+  "description": "A futuristic, cyberpunk-themed landing page for the Code & Beyond tech event, part of the Business & Cultural Gala 2025 at the University of Gwadar.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HammadHARahim/code-and-beyond.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/HammadHARahim/code-and-beyond/issues"
+  },
+  "homepage": "https://github.com/HammadHARahim/code-and-beyond#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.87.1"
+  }
+}

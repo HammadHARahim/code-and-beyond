@@ -307,14 +307,19 @@ fileInput.addEventListener('change', (e) => {
     }
 });
 
-// Form Submit Handler
+// ========================================
+// SUPABASE INTEGRATION
+// ========================================
+import { supabase } from './supabase-client.js';
+
+// Form Submit Handler - SUPABASE VERSION
 const registerForm = document.getElementById('register-form');
 
-registerForm.addEventListener('submit', (e) => {
+registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Get password values
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
 
@@ -333,56 +338,104 @@ registerForm.addEventListener('submit', (e) => {
 
     const accommodationRequired = document.querySelector('input[name="accommodation"]:checked')?.value === 'yes';
 
-    const formData = {
-        email: email,
-        teamName: document.getElementById('team-name').value,
-        teamLead: document.getElementById('team-lead').value,
+    const participantData = {
+        team_name: document.getElementById('team-name').value,
+        team_lead: document.getElementById('team-lead').value,
         university: document.getElementById('university').value,
         department: document.getElementById('department').value,
         phone: document.getElementById('phone').value,
-        teamSize: document.getElementById('team-size').value,
-        accommodation: {
-            required: accommodationRequired,
-            type: accommodationRequired ? document.getElementById('accommodation-type').value : null,
-            duration: accommodationRequired ? document.getElementById('accommodation-duration').value : null,
-            specialRequirements: accommodationRequired ? document.getElementById('special-requirements').value : null
-        },
-        projectTitle: document.getElementById('project-title').value,
-        category: document.getElementById('category').value,
-        description: document.getElementById('description').value,
-        problemSolved: document.getElementById('problem-solved').value,
-        techStack: document.getElementById('tech-stack').value,
-        projectUrl: document.getElementById('project-url').value,
-        videoUrl: document.getElementById('video-url').value,
-        teamMembers: collectTeamMembers() // Collect team member data
+        team_size: parseInt(document.getElementById('team-size').value),
+        accommodation_needed: accommodationRequired,
+        accommodation_type: accommodationRequired ? document.getElementById('accommodation-type').value : null,
+        accommodation_duration: accommodationRequired ? document.getElementById('accommodation-duration').value : null,
+        special_requirements: accommodationRequired ? document.getElementById('special-requirements').value : null,
+        project_title: document.getElementById('project-title').value,
+        project_category: document.getElementById('category').value,
+        project_description: document.getElementById('description').value,
+        problem_solved: document.getElementById('problem-solved').value,
+        tech_stack: document.getElementById('tech-stack').value,
+        project_url: document.getElementById('project-url').value || null,
+        video_url: document.getElementById('video-url').value || null
     };
 
-    // Store credentials in localStorage (FOR DEVELOPMENT ONLY!)
-    const credentials = {
-        email: email,
-        password: password, // WARNING: Plain text password - NOT SECURE!
-        registrationData: formData,
-        registeredAt: new Date().toISOString()
-    };
+    const teamMembers = collectTeamMembers();
 
-    // Get existing users or create new array
-    let users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
+    try {
+        // Show loading state
+        const submitBtn = registerForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Registering...';
 
-    // Check if email already exists
-    const existingUserIndex = users.findIndex(u => u.email === email);
-    if (existingUserIndex >= 0) {
-        // Update existing user
-        users[existingUserIndex] = credentials;
-    } else {
-        // Add new user
-        users.push(credentials);
+        // Step 1: Create Supabase auth user
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    role: 'participant'
+                }
+            }
+        });
+
+        if (authError) {
+            console.error('Auth error:', authError);
+            alert(`Registration failed: ${authError.message}`);
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            return;
+        }
+
+        // Step 2: Insert participant data
+        participantData.user_id = authData.user.id;
+
+        const { data: participantRecord, error: participantError } = await supabase
+            .from('participants')
+            .insert([participantData])
+            .select()
+            .single();
+
+        if (participantError) {
+            console.error('Participant error:', participantError);
+            alert(`Failed to save registration: ${participantError.message}`);
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            return;
+        }
+
+        // Step 3: Insert team members if any
+        if (teamMembers.length > 0) {
+            const teamMemberRecords = teamMembers.map(member => ({
+                participant_id: participantRecord.id,
+                member_name: member.name,
+                member_email: member.email,
+                member_role: member.department
+            }));
+
+            const { error: membersError } = await supabase
+                .from('team_members')
+                .insert(teamMemberRecords);
+
+            if (membersError) {
+                console.error('Team members error:', membersError);
+                // Don't fail the whole registration, just log it
+                console.warn('Team members not saved, but registration successful');
+            }
+        }
+
+        console.log('Registration successful:', authData.user.email);
+
+        // Show success message and redirect
+        alert('Registration submitted successfully! You can now login with your credentials.');
+        window.location.href = 'login.html';
+
+    } catch (error) {
+        console.error('Unexpected error during registration:', error);
+        alert('An unexpected error occurred. Please try again.');
+
+        const submitBtn = registerForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Complete Registration';
     }
-
-    localStorage.setItem('codeAndBeyondUsers', JSON.stringify(users));
-
-    console.log('Registration submitted:', formData);
-
-    // Show success message and redirect
-    alert('Registration submitted successfully! You can now login with your credentials.');
-    window.location.href = 'login.html';
 });
+

@@ -1,40 +1,47 @@
 // ========================================
 // ADMIN ROUTE GUARD
-// ========================================
-// This script ensures only admins can access the admin panel
+// ========================================// Admin Route Guard - Supabase Version
+// Protects admin routes from unauthorized access
 
-(function () {
-    // Get current user from localStorage
-    const currentUser = localStorage.getItem('currentUser');
+import { supabase } from './supabase-client.js';
 
-    // If no user is logged in, redirect to login page
-    if (!currentUser) {
-        alert('Please login to access the admin panel');
-        window.location.href = 'login.html';
-        return;
-    }
-
-    // Parse user data
-    let user;
+(async function () {
     try {
-        user = JSON.parse(currentUser);
+        // Check for active Supabase session
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error) {
+            console.error('Session check error:', error);
+            redirectToLogin('Session error occurred');
+            return;
+        }
+
+        if (!session) {
+            redirectToLogin('No active session');
+            return;
+        }
+
+        // Verify user role from metadata
+        const userRole = session.user.user_metadata?.role || 'participant';
+
+        if (userRole !== 'admin') {
+            alert('Access denied. Admin privileges required.');
+            console.error('Unauthorized access attempt by:', session.user.email);
+            // Redirect participants to their dashboard
+            window.location.href = 'participant.html';
+            return;
+        }
+
+        // Admin access granted
+        console.log('Admin access granted:', session.user.email);
+
     } catch (error) {
-        console.error('Invalid user session data');
-        localStorage.removeItem('currentUser');
-        window.location.href = 'login.html';
-        return;
+        console.error('Admin guard error:', error);
+        redirectToLogin('Authentication error');
     }
-
-    // Check if user is admin
-    if (user.role !== 'admin') {
-        alert('Access denied. Admin privileges required.');
-        console.error('Unauthorized access attempt by:', user.email);
-        // Redirect participants back to their dashboard
-        window.location.href = 'participant.html';
-        return;
-    }
-
-    // Admin access granted
-    window.currentUser = user;
-    console.log('Admin access granted:', user.email);
 })();
+
+function redirectToLogin(reason) {
+    console.log('Redirecting to login:', reason);
+    window.location.href = 'login.html';
+}
