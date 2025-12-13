@@ -550,3 +550,83 @@ window.deleteParticipant = deleteParticipant;
 window.closeDeleteModal = closeDeleteModal;
 window.confirmDelete = confirmDelete;
 window.closeDetailModal = closeDetailModal;
+
+// ========================================
+// CSV EXPORT FUNCTIONALITY
+// ========================================
+
+function exportToCSV() {
+    if (filteredParticipants.length === 0) {
+        alert('No participants to export');
+        return;
+    }
+
+    // CSV headers
+    const headers = [
+        'Team Name',
+        'Team Lead',
+        'University',
+        'Department',
+        'Phone',
+        'Team Size',
+        'Project Title',
+        'Category',
+        'Description',
+        'Problem Solved',
+        'Tech Stack',
+        'Project URL',
+        'Video URL',
+        'Accommodation',
+        'Status',
+        'Registered Date'
+    ];
+
+    // Create CSV rows
+    const rows = filteredParticipants.map(p => [
+        p.teamName || '',
+        p.teamLead || '',
+        p.university || '',
+        p.department || '',
+        p.phone || '',
+        p.teamSize || '',
+        p.projectTitle || '',
+        formatCategory(p.category) || '',
+        p.description || '',
+        p.problemSolved || '',
+        p.techStack || '',
+        p.projectUrl || '',
+        p.videoUrl || '',
+        p.accommodation?.required ? 'Yes' : 'No',
+        (p.status || 'pending').charAt(0).toUpperCase() + (p.status || 'pending').slice(1),
+        formatDate(p.registeredAt)
+    ]);
+
+    // Combine headers and rows
+    const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    ].join('\n');
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', `participants_export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Add export button event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const exportBtn = document.getElementById('export-btn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportToCSV);
+    }
+});
+
+window.exportToCSV = exportToCSV;
