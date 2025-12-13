@@ -75,6 +75,30 @@ async function populateParticipantData() {
         document.getElementById('team-size').textContent = participant.team_size ? `${participant.team_size} ${participant.team_size === 1 ? 'Member' : 'Members'}` : 'N/A';
         document.getElementById('team-members-count').textContent = participant.team_size || '0';
 
+        // Update Status Badge Dynamicall
+        const statusBadge = document.querySelector('.status-badge');
+        if (statusBadge) {
+            // Remove all status classes
+            statusBadge.classList.remove('status-pending', 'status-approved', 'status-rejected');
+
+            // Get current status
+            const status = participant.status || 'pending';
+
+            // Add appropriate class and update text
+            statusBadge.classList.add(`status-${status}`);
+
+            const statusTexts = {
+                'pending': 'Pending Review',
+                'approved': 'Approved ✓',
+                'rejected': 'Rejected ✗'
+            };
+
+            statusBadge.innerHTML = `
+                <span class="badge-dot"></span>
+                ${statusTexts[status] || 'Unknown'}
+            `;
+        }
+
         // Project Details
         document.getElementById('project-title').textContent = participant.project_title || 'Untitled Project';
         document.getElementById('project-category').textContent = formatCategory(participant.project_category);

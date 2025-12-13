@@ -441,6 +441,20 @@ body {
     box-shadow: 0 0 16px var(--color-yellow-glow);
 }
 
+.status-approved {
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    box-shadow: 0 0 16px rgba(0, 255, 136, 0.5);
+}
+
+.status-rejected {
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    box-shadow: 0 0 16px rgba(255, 68, 68, 0.5);
+}
+
 .badge-dot {
     width: 8px;
     height: 8px;
