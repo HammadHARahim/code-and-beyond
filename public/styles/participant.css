@@ -734,14 +734,24 @@ body {
         padding: var(--spacing-md);
     }
 
-    .nav-label {
-        display: none;
+    .dashboard-header {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        text-align: center;
     }
 
     .header-left {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-sm);
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-right {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .user-profile {
+        justify-content: center;
     }
 
     .quick-stats {
