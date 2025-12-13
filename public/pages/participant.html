@@ -11,7 +11,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="../styles/scrollbar.css">
     <link rel="stylesheet" href="../styles/participant.css">
+
+    <!-- Participant Route Guard - Must be loaded first -->
+    <script src="../scripts/participant-guard.js"></script>
 </head>
 
 <body>
@@ -42,7 +46,7 @@
             <!-- Participant Info Card -->
             <section class="participant-info-card glass-card">
                 <div class="card-header">
-                    <h2 class="card-title">Participant Information</h2>
+                    <h2 class="card-title">Registration Details</h2>
                     <div class="card-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M20 21V19C20 16.79 18.21 15 16 15H8C5.79 15 4 16.79 4 19V21" stroke="currentColor"
@@ -53,30 +57,152 @@
                 </div>
 
                 <div class="participant-content">
-                    <div class="participant-id-display">
+                    <!-- Participant ID -->
+                    <div class="id-section">
                         <div class="id-label">Participant ID</div>
-                        <div class="id-value">CB-2026-0142</div>
+                        <div class="id-value" id="participant-id">Loading...</div>
                     </div>
 
-                    <div class="participant-details">
-                        <div class="detail-item">
-                            <div class="detail-label">Project</div>
-                            <div class="detail-value project-title">Timber Mart CRM</div>
+                    <!-- Rejection Reason (Only shown if rejected) -->
+                    <div id="rejection-reason-section" class="rejection-alert" style="display: none;">
+                        <div class="rejection-alert-header">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L2 22h20L12 2z" stroke="currentColor" stroke-width="2" fill="none" />
+                                <path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            <strong>Registration Rejected</strong>
                         </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Status</div>
-                            <span class="status-badge status-pending">
-                                <span class="badge-dot"></span>
-                                Pending Review
-                            </span>
+                        <div class="rejection-reason-text" id="rejection-reason-text"></div>
+                    </div>
+
+                    <!-- Team Information -->
+                    <div>
+                        <h3 class="section-title">Team Information</h3>
+                        <div class="section-divider"></div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Team Name</div>
+                                <div class="info-value" id="team-name">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Team Lead</div>
+                                <div class="info-value" id="team-lead">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">University</div>
+                                <div class="info-value" id="university">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Department</div>
+                                <div class="info-value" id="department">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Email Address</div>
+                                <div class="info-value" id="email">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Contact Number</div>
+                                <div class="info-value" id="phone">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Team Size</div>
+                                <div class="info-value" id="team-size">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Status</div>
+                                <span class="status-badge status-pending">
+                                    <span class="badge-dot"></span>
+                                    Pending Review
+                                </span>
+                            </div>
                         </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Segment</div>
-                            <div class="detail-value">Code & Beyond @ Business Gala</div>
+                    </div>
+
+                    <!-- Team Members -->
+                    <div id="team-members-display">
+                        <h3 class="section-title">Team Members</h3>
+                        <div class="section-divider"></div>
+                        <div id="team-members-list" class="team-members-list">
+                            <!-- Team members will be populated here -->
+                            <p class="info-value" style="color: rgba(255, 255, 255, 0.5);">No team members added</p>
                         </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Event Date</div>
-                            <div class="detail-value">January 15, 2026</div>
+                    </div>
+
+                    <!-- Project Details -->
+                    <div>
+                        <h3 class="section-title">Project Details</h3>
+                        <div class="section-divider"></div>
+                        <div class="info-grid">
+                            <div class="info-item" style="grid-column: 1 / -1;">
+                                <div class="info-label">Project Title</div>
+                                <div class="detail-value project-title" id="project-title">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Category</div>
+                                <div class="category-badge" id="project-category">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Technologies Used</div>
+                                <div class="info-value" id="tech-stack">Loading...</div>
+                            </div>
+                            <div class="info-item" style="grid-column: 1 / -1;">
+                                <div class="info-label">Project Description</div>
+                                <div class="info-value" id="project-description">Loading...</div>
+                            </div>
+                            <div class="info-item" style="grid-column: 1 / -1;">
+                                <div class="info-label">Problem Solved</div>
+                                <div class="info-value" id="problem-solved">Loading...</div>
+                            </div>
+                            <div class="info-item" id="project-url-container">
+                                <div class="info-label">Project URL</div>
+                                <a href="#" class="info-badge" id="project-url" target="_blank">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <path d="M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                    View Project
+                                </a>
+                            </div>
+                            <div class="info-item" id="video-url-container">
+                                <div class="info-label">Demo Video</div>
+                                <a href="#" class="info-badge" id="video-url" target="_blank">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <path d="M23 7l-7 5 7 5V7z" stroke="currentColor" stroke-width="2" />
+                                        <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor"
+                                            stroke-width="2" />
+                                    </svg>
+                                    Watch Video
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accommodation -->
+                    <div id="accommodation-section">
+                        <h3 class="section-title">Accommodation</h3>
+                        <div class="section-divider"></div>
+                        <div class="info-grid" id="accommodation-details">
+                            <div class="info-item">
+                                <div class="info-label">Accommodation Required</div>
+                                <div class="info-value" id="accommodation-required">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Registration Info -->
+                    <div>
+                        <h3 class="section-title">Registration Information</h3>
+                        <div class="section-divider"></div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Registered On</div>
+                                <div class="info-value" id="registered-date">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Event Date</div>
+                                <div class="info-value">January 15, 2026</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -107,7 +233,7 @@
                     </div>
                     <div class="stat-content">
                         <div class="stat-label">Team Members</div>
-                        <div class="stat-value">4</div>
+                        <div class="stat-value" id="team-members-count">4</div>
                     </div>
                 </div>
 

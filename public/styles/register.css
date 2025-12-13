@@ -88,10 +88,13 @@ body {
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     padding: var(--spacing-2xl);
+    position: relative;
+    /* Remove transform to prevent positioning context issues on mobile */
 }
 
 /* ========================================
@@ -153,6 +156,7 @@ body {
     gap: var(--spacing-lg);
     padding-bottom: var(--spacing-xl);
     border-bottom: 1px solid var(--glass-border);
+    overflow: visible;
 }
 
 .form-section:last-of-type {
@@ -170,12 +174,18 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
+    overflow: visible;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
+    overflow: visible;
+    position: relative;
+    /* Prevent positioning context issues */
+    isolation: auto;
+    transform: none;
 }
 
 .form-label {
@@ -189,6 +199,7 @@ body {
 .form-input,
 .form-select,
 .form-textarea {
+    width: 100%;
     padding: var(--spacing-md);
     background: rgba(15, 15, 32, 0.8);
     border: 1px solid var(--glass-border);
@@ -214,7 +225,26 @@ body {
 }
 
 .form-select {
+    width: 100%;
     cursor: pointer;
+    text-align: left;
+    direction: ltr;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%2300d4ff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-select option {
+    background: var(--color-bg-dark);
+    color: #ffffff;
+    padding: var(--spacing-sm);
+    direction: ltr;
 }
 
 .form-textarea {
@@ -361,7 +391,112 @@ body {
     color: rgba(255, 255, 255, 0.5);
     font-size: 0.875rem;
     margin-top: -0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ========================================
+   TEAM MEMBERS SECTION
+   ======================================== */
+
+.team-members-section {
+    margin-top: var(--spacing-xl);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.btn-add-member {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    color: var(--color-cyan);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-add-member:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+}
+
+.btn-add-member svg {
+    filter: drop-shadow(0 0 4px var(--color-cyan-glow));
+}
+
+.team-members-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.team-member-card {
+    background: rgba(15, 15, 32, 0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    position: relative;
+    transition: all var(--transition-base);
+}
+
+.team-member-card:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.1);
+}
+
+.member-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.member-number {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-remove-member {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 6px;
+    color: #ff4444;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-remove-member:hover {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: rgba(255, 68, 68, 0.5);
+    box-shadow: 0 0 12px rgba(255, 68, 68, 0.2);
+}
+
+.member-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.member-fields .form-group {
+    margin: 0;
 }
 
 .field-note {
@@ -649,6 +784,10 @@ body {
 
     .glass-card {
         padding: var(--spacing-xl);
+        /* Fix for dropdown positioning on mobile */
+        transform: none;
+        will-change: auto;
+        isolation: auto;
     }
 
     .logo {
@@ -662,12 +801,22 @@ body {
     .form-row {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
+        overflow: visible;
     }
 
     /* Ensure password fields stack properly on mobile */
     .form-section .form-row .form-group {
         width: 100%;
         max-width: 100%;
+        overflow: visible;
+    }
+
+    .form-section {
+        overflow: visible;
+    }
+
+    .form-group {
+        overflow: visible;
     }
 
     .password-input-wrapper {
@@ -685,6 +834,28 @@ body {
         max-width: 100%;
     }
 
+    .form-select {
+        width: 100%;
+        max-width: 100%;
+        font-size: 1rem;
+        padding: var(--spacing-md);
+        padding-right: var(--spacing-md);
+        position: relative;
+        text-align: left;
+        direction: ltr;
+        /* Use native select on mobile for better compatibility */
+        appearance: auto;
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        background-image: none;
+    }
+
+    /* Ensure dropdown options align properly on mobile */
+    .form-select option {
+        text-align: left;
+        direction: ltr;
+    }
+
     .btn-primary {
         width: 100%;
     }
@@ -695,5 +866,20 @@ body {
 
     .radio-option {
         padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .member-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .btn-add-member {
+        width: 100%;
+        justify-content: center;
     }
 }

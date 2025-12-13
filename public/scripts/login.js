@@ -66,6 +66,15 @@ function animate() {
 
 animate();
 
+// Password Visibility Toggle
+const togglePasswordBtn = document.getElementById('toggle-password');
+const passwordInput = document.getElementById('password');
+
+togglePasswordBtn.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+});
+
 // Login Form Handler
 const loginForm = document.getElementById('login-form');
 
@@ -76,10 +85,31 @@ loginForm.addEventListener('submit', (e) => {
     const password = document.getElementById('password').value;
     const role = document.querySelector('input[name="role"]:checked').value;
 
-    // Get stored users from localStorage
-    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
+    // Hardcoded admin credentials (for development only - use backend auth in production)
+    // Credentials from admin-credentials.json
+    const ADMIN_EMAIL = 'admin@codebeyond.event';
+    const ADMIN_PASSWORD = 'CodeBeyond2025!';
 
-    // Find user with matching email
+    // Check if trying to login as admin
+    if (role === 'admin') {
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+            // Admin login successful
+            localStorage.setItem('currentUser', JSON.stringify({
+                email: ADMIN_EMAIL,
+                role: 'admin',
+                loginTime: new Date().toISOString()
+            }));
+            console.log('Admin login successful');
+            window.location.href = 'admin.html';
+            return;
+        } else {
+            alert('Invalid admin credentials. Please check your email and password.');
+            return;
+        }
+    }
+
+    // Regular participant login
+    const users = JSON.parse(localStorage.getItem('codeAndBeyondUsers') || '[]');
     const user = users.find(u => u.email === email);
 
     // Validate credentials
@@ -96,16 +126,10 @@ loginForm.addEventListener('submit', (e) => {
     // Store current session
     localStorage.setItem('currentUser', JSON.stringify({
         email: user.email,
-        role: role,
+        role: 'participant',
         loginTime: new Date().toISOString()
     }));
 
-    console.log('Login successful:', { email, role });
-
-    // Redirect based on role
-    if (role === 'admin') {
-        window.location.href = 'admin.html';
-    } else {
-        window.location.href = 'participant.html';
-    }
+    console.log('Participant login successful:', { email });
+    window.location.href = 'participant.html';
 });

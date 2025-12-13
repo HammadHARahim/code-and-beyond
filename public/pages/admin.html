@@ -11,7 +11,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="../styles/scrollbar.css">
     <link rel="stylesheet" href="../styles/admin.css">
+    <link rel="stylesheet" href="../styles/admin-fixes.css">
+
+    <!-- Admin Route Guard - Must be loaded first -->
+    <script src="../scripts/admin-guard.js"></script>
 </head>
 
 <body>
@@ -42,22 +47,7 @@
                     <rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="2" />
                     <rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="2" />
                 </svg>
-                <span>Projects</span>
-            </a>
-            <a href="#review" class="nav-item">
-                <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 2L12.5 7.5L18 8L14 12.5L15 18L10 15L5 18L6 12.5L2 8L7.5 7.5L10 2Z"
-                        stroke="currentColor" stroke-width="2" />
-                </svg>
-                <span>Review</span>
-            </a>
-            <a href="#settings" class="nav-item">
-                <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2" />
-                    <path d="M10 2V4M10 16V18M18 10H16M4 10H2M15.5 4.5L14 6M6 14L4.5 15.5M15.5 15.5L14 14M6 6L4.5 4.5"
-                        stroke="currentColor" stroke-width="2" />
-                </svg>
-                <span>Gala Settings</span>
+                <span>Registered Participants</span>
             </a>
         </nav>
 
@@ -74,21 +64,19 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Header -->
-        <header class="dashboard-header">
-            <div class="header-left">
-                <h1 class="page-title">Admin Console</h1>
-                <p class="page-subtitle">Business & Cultural Gala 2025</p>
+        <!-- Page Header -->
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Registered Participants</h1>
+                <p class="page-subtitle">Manage and review participant submissions</p>
             </div>
-            <div class="header-right">
-                <button class="btn-icon" title="Notifications">
+            <div class="header-actions">
+                <button class="icon-btn logout-btn" title="Logout" onclick="logout()">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M10 2C7 2 5 4 5 7V11L3 13V14H17V13L15 11V7C15 4 13 2 10 2Z" stroke="currentColor"
-                            stroke-width="2" />
-                        <path d="M8 14V15C8 16.1 8.9 17 10 17C11.1 17 12 16.1 12 15V14" stroke="currentColor"
-                            stroke-width="2" />
+                        <path
+                            d="M13 16L17 12L13 8M17 12H7M7 16C7 16.5304 6.78929 17.0391 6.41421 17.4142C6.03914 17.7893 5.53043 18 5 18H4C3.46957 18 2.96086 17.7893 2.58579 17.4142C2.21071 17.0391 2 16.5304 2 16V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H5C5.53043 2 6.03914 2.21071 6.41421 2.58579C6.78929 2.96086 7 3.46957 7 4"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="notification-badge">3</span>
                 </button>
             </div>
         </header>
@@ -104,7 +92,7 @@
                             stroke="currentColor" stroke-width="2" />
                     </svg>
                 </div>
-                <div class="stat-value">127</div>
+                <div class="stat-value" id="stat-total">0</div>
                 <div class="stat-trend positive">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" />
@@ -121,7 +109,7 @@
                         <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" />
                     </svg>
                 </div>
-                <div class="stat-value">18</div>
+                <div class="stat-value" id="stat-pending">0</div>
                 <div class="stat-trend warning">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M2 8H14" stroke="currentColor" stroke-width="2" />
@@ -132,41 +120,65 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-label">Live Site Traffic</span>
+                    <span class="stat-label">Projects Rejected</span>
                     <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 13L9 7L13 11L21 3M21 3H15M21 3V9" stroke="currentColor" stroke-width="2" />
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                     </svg>
                 </div>
-                <div class="stat-value">2,341</div>
-                <div class="stat-trend positive">
+                <div class="stat-value" id="stat-rejected">0</div>
+                <div class="stat-trend negative">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" />
+                        <path d="M8 4V12M8 12L4 8M8 12L12 8" stroke="currentColor" stroke-width="2" />
                     </svg>
-                    <span>8% from yesterday</span>
+                    <span>Needs attention</span>
                 </div>
             </div>
         </section>
 
+
         <!-- Projects Table -->
         <section class="table-section">
             <div class="section-header">
-                <h2 class="section-title">Student Projects</h2>
+                <h2 class="section-title">Registered Participants</h2>
                 <div class="section-actions">
-                    <button class="btn-secondary">
+                    <input type="text" id="search-input" class="search-input"
+                        placeholder="Search by name, email, project, university..." />
+                    <select id="status-filter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <select id="category-filter" class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="ai">AI</option>
+                        <option value="web">Web Development</option>
+                        <option value="mobile">Mobile</option>
+                        <option value="blockchain">Blockchain</option>
+                        <option value="iot">IoT</option>
+                        <option value="data">Data Science</option>
+                        <option value="cybersecurity">Cybersecurity</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <button class="btn-secondary" id="clear-filters">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path
-                                d="M14 14L10 10M11 6C11 8.76 8.76 11 6 11C3.24 11 1 8.76 1 6C1 3.24 3.24 1 6 1C8.76 1 11 3.24 11 6Z"
+                            <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Clear
+                    </button>
+                    <button class="btn-primary" id="export-btn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M14 10V13C14 13.5 13.5 14 13 14H3C2.5 14 2 13.5 2 13V10M8 2V11M8 11L5 8M8 11L11 8"
                                 stroke="currentColor" stroke-width="2" />
                         </svg>
-                        Search
+                        Export CSV
                     </button>
-                    <button class="btn-secondary">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M2 4H14M4 4V14H12V4M6 7V11M10 7V11M6 4V2H10V4" stroke="currentColor"
-                                stroke-width="2" />
-                        </svg>
-                        Filter
-                    </button>
+                    <div class="bulk-actions" id="bulk-actions" style="display: none;">
+                        <span class="bulk-selected-count" id="bulk-selected-count">0 selected</span>
+                        <button class="btn-secondary" onclick="bulkApprove()">Approve Selected</button>
+                        <button class="btn-secondary" onclick="showBulkRejectModal()">Reject Selected</button>
+                        <button class="btn-danger" onclick="bulkDelete()">Delete Selected</button>
+                    </div>
                 </div>
             </div>
 
@@ -174,7 +186,10 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Project ID</th>
+                            <th>
+                                <input type="checkbox" id="select-all" class="table-checkbox" title="Select All" />
+                            </th>
+                            <th>ID</th>
                             <th>Student Name</th>
                             <th>Project Title</th>
                             <th>Category</th>
@@ -183,119 +198,8 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>#001</td>
-                            <td>Ahmad Khan</td>
-                            <td>AI-Powered Study Assistant</td>
-                            <td>Artificial Intelligence</td>
-                            <td>2025-12-05</td>
-                            <td><span class="badge badge-pending">Pending</span></td>
-                            <td>
-                                <button class="btn-table-action" title="View">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
-                                            stroke="currentColor" stroke-width="2" />
-                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                                <button class="btn-table-action" title="Approve">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M3 8L6 11L13 4" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#002</td>
-                            <td>Fatima Ali</td>
-                            <td>Smart Campus Navigation</td>
-                            <td>Mobile Development</td>
-                            <td>2025-12-04</td>
-                            <td><span class="badge badge-approved">Approved</span></td>
-                            <td>
-                                <button class="btn-table-action" title="View">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
-                                            stroke="currentColor" stroke-width="2" />
-                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                                <button class="btn-table-action" title="Edit">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z" stroke="currentColor"
-                                            stroke-width="2" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#003</td>
-                            <td>Hassan Baloch</td>
-                            <td>Blockchain Voting System</td>
-                            <td>Blockchain</td>
-                            <td>2025-12-06</td>
-                            <td><span class="badge badge-pending">Pending</span></td>
-                            <td>
-                                <button class="btn-table-action" title="View">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
-                                            stroke="currentColor" stroke-width="2" />
-                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                                <button class="btn-table-action" title="Approve">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M3 8L6 11L13 4" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#004</td>
-                            <td>Zainab Hussain</td>
-                            <td>E-Learning Platform</td>
-                            <td>Web Development</td>
-                            <td>2025-12-03</td>
-                            <td><span class="badge badge-approved">Approved</span></td>
-                            <td>
-                                <button class="btn-table-action" title="View">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
-                                            stroke="currentColor" stroke-width="2" />
-                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                                <button class="btn-table-action" title="Edit">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M11.5 1.5L14.5 4.5L5 14H2V11L11.5 1.5Z" stroke="currentColor"
-                                            stroke-width="2" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#005</td>
-                            <td>Omar Ahmed</td>
-                            <td>IoT Home Automation</td>
-                            <td>Internet of Things</td>
-                            <td>2025-12-07</td>
-                            <td><span class="badge badge-pending">Pending</span></td>
-                            <td>
-                                <button class="btn-table-action" title="View">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M1 8C1 8 3 3 8 3C13 3 15 8 15 8C15 8 13 13 8 13C3 13 1 8 1 8Z"
-                                            stroke="currentColor" stroke-width="2" />
-                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                                <button class="btn-table-action" title="Approve">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M3 8L6 11L13 4" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
+                    <tbody id="participants-tbody">
+                        <!-- Data will be populated by JavaScript from localStorage -->
                     </tbody>
                 </table>
             </div>
@@ -316,7 +220,225 @@
         </section>
     </main>
 
+    <!-- Rejection Modal -->
+    <div id="reject-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Reject Participant</h2>
+            <p class="modal-subtitle">Please provide a reason for rejection (visible to participant)</p>
+
+            <textarea id="rejection-reason" class="rejection-textarea" placeholder="Enter rejection reason..." rows="4"
+                required></textarea>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeRejectModal()">Cancel</button>
+                <button class="btn-danger" onclick="rejectParticipant()">Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Participant Detail View Modal -->
+    <div id="detail-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="detail-modal-header">
+                <h2 class="modal-title">Participant Details</h2>
+                <button class="modal-close-btn" onclick="closeDetailModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6l18 18" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="detail-sections">
+                <!-- Status Section -->
+                <div class="detail-section">
+                    <h3 class="detail-section-title">Status</h3>
+                    <div class="detail-status-container">
+                        <span id="detail-status-badge" class="badge">Loading...</span>
+                        <div id="detail-rejection-reason" class="detail-rejection" style="display: none;">
+                            <strong>Rejection Reason:</strong>
+                            <p id="detail-rejection-text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Information -->
+                <div class="detail-section">
+                    <h3 class="detail-section-title">Team Information</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Team Name:</span>
+                            <span class="detail-value" id="detail-team-name"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Team Lead:</span>
+                            <span class="detail-value" id="detail-team-lead"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value" id="detail-email"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Phone:</span>
+                            <span class="detail-value" id="detail-phone"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">University:</span>
+                            <span class="detail-value" id="detail-university"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Department:</span>
+                            <span class="detail-value" id="detail-department"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Team Size:</span>
+                            <span class="detail-value" id="detail-team-size"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Details -->
+                <div class="detail-section">
+                    <h3 class="detail-section-title">Project Details</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item full">
+                            <span class="detail-label">Project Title:</span>
+                            <span class="detail-value" id="detail-project-title"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Category:</span>
+                            <span class="detail-value" id="detail-category"></span>
+                        </div>
+                        <div class="detail-item full">
+                            <span class="detail-label">Description:</span>
+                            <span class="detail-value" id="detail-description"></span>
+                        </div>
+                        <div class="detail-item full">
+                            <span class="detail-label">Problem Solved:</span>
+                            <span class="detail-value" id="detail-problem"></span>
+                        </div>
+                        <div class="detail-item full">
+                            <span class="detail-label">Tech Stack:</span>
+                            <span class="detail-value" id="detail-tech"></span>
+                        </div>
+                        <div class="detail-item" id="detail-url-container" style="display: none;">
+                            <span class="detail-label">Project URL:</span>
+                            <a class="detail-link" id="detail-url" href="#" target="_blank"></a>
+                        </div>
+                        <div class="detail-item" id="detail-video-container" style="display: none;">
+                            <span class="detail-label">Video URL:</span>
+                            <a class="detail-link" id="detail-video" href="#" target="_blank"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Info -->
+                <div class="detail-section">
+                    <h3 class="detail-section-title">Registration Information</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Registered:</span>
+                            <span class="detail-value" id="detail-registered"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Accommodation:</span>
+                            <span class="detail-value" id="detail-accommodation"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeDetailModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content modal-large">
+            <h2 class="modal-title">Edit Participant</h2>
+            <p class="modal-subtitle">Update participant registration information</p>
+
+            <form id="edit-form" class="edit-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Team Name *</label>
+                        <input type="text" id="edit-team-name" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Team Lead *</label>
+                        <input type="text" id="edit-team-lead" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">University *</label>
+                        <input type="text" id="edit-university" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Department *</label>
+                        <input type="text" id="edit-department" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone *</label>
+                        <input type="tel" id="edit-phone" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Team Size *</label>
+                        <select id="edit-team-size" class="form-input" required>
+                            <option value="1">1 Member</option>
+                            <option value="2">2 Members</option>
+                            <option value="3">3 Members</option>
+                            <option value="4">4 Members</option>
+                            <option value="5">5+ Members</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Project Title *</label>
+                        <input type="text" id="edit-project-title" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select id="edit-category" class="form-input" required>
+                            <option value="ai">AI</option>
+                            <option value="web">Web Development</option>
+                            <option value="mobile">Mobile</option>
+                            <option value="blockchain">Blockchain</option>
+                            <option value="iot">IoT</option>
+                            <option value="data">Data Science</option>
+                            <option value="cybersecurity">Cybersecurity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Delete Participant</h2>
+            <p class="modal-subtitle">Are you sure you want to delete this participant? This action cannot be undone.
+            </p>
+
+            <div class="delete-info">
+                <p><strong>Team Lead:</strong> <span id="delete-team-lead"></span></p>
+                <p><strong>Project:</strong> <span id="delete-project"></span></p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <script src="../scripts/admin.js"></script>
+    <script src="../scripts/logout.js"></script>
 </body>
 
 </html>

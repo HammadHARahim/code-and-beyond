@@ -11,6 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="../styles/scrollbar.css">
     <link rel="stylesheet" href="../styles/register.css">
 </head>
 
@@ -68,18 +69,8 @@
 
                         <div class="form-group">
                             <label for="confirm-password" class="form-label">Confirm Password *</label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="confirm-password" class="form-input"
-                                    placeholder="Re-enter password" minlength="8" required>
-                                <button type="button" class="password-toggle" id="toggle-confirm-password"
-                                    aria-label="Toggle password visibility">
-                                    <svg class="eye-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M10 4C5 4 2 10 2 10s3 6 8 6 8-6 8-6-3-6-8-6z" stroke="currentColor"
-                                            stroke-width="2" />
-                                        <circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                            </div>
+                            <input type="password" id="confirm-password" class="form-input"
+                                placeholder="Re-enter password" minlength="8" required>
                             <span class="password-match-message" id="password-match"></span>
                         </div>
                     </div>
@@ -144,6 +135,25 @@
                                 <option value="4">4 Members</option>
                                 <option value="5">5+ Members</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Team Members Section -->
+                    <div class="team-members-section">
+                        <div class="section-header">
+                            <label class="form-label">Team Members</label>
+                            <button type="button" class="btn-add-member" id="add-member-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" />
+                                </svg>
+                                Add Member
+                            </button>
+                        </div>
+                        <p class="section-note">Add information for each team member (excluding the team lead)</p>
+
+                        <div id="team-members-container" class="team-members-container">
+                            <!-- Team member fields will be added here dynamically -->
                         </div>
                     </div>
                 </div>

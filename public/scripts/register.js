@@ -68,26 +68,116 @@ function drawCircuitBoard() {
     });
 }
 
+
 initCircuitBoard();
 drawCircuitBoard();
 
 // ========================================
+// TEAM MEMBERS MANAGEMENT
+// ========================================
+
+let memberCount = 0;
+const teamMembersContainer = document.getElementById('team-members-container');
+const addMemberBtn = document.getElementById('add-member-btn');
+
+addMemberBtn.addEventListener('click', addTeamMember);
+
+function addTeamMember() {
+    memberCount++;
+
+    const memberCard = document.createElement('div');
+    memberCard.className = 'team-member-card';
+    memberCard.dataset.memberIndex = memberCount;
+
+    memberCard.innerHTML = `
+        <div class="member-header">
+            <span class="member-number">Member ${memberCount}</span>
+            <button type="button" class="btn-remove-member" onclick="removeTeamMember(${memberCount})">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="member-fields">
+            <div class="form-group">
+                <label for="member-${memberCount}-name" class="form-label">Full Name *</label>
+                <input type="text" id="member-${memberCount}-name" class="form-input member-name" 
+                    placeholder="Enter full name" required>
+            </div>
+            <div class="form-group">
+                <label for="member-${memberCount}-department" class="form-label">Department *</label>
+                <input type="text" id="member-${memberCount}-department" class="form-input member-department" 
+                    placeholder="e.g., Computer Science" required>
+            </div>
+            <div class="form-group">
+                <label for="member-${memberCount}-email" class="form-label">Email Address *</label>
+                <input type="email" id="member-${memberCount}-email" class="form-input member-email" 
+                    placeholder="email@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="member-${memberCount}-phone" class="form-label">Phone Number</label>
+                <input type="tel" id="member-${memberCount}-phone" class="form-input member-phone" 
+                    placeholder="+92 300 1234567">
+            </div>
+        </div>
+    `;
+
+    teamMembersContainer.appendChild(memberCard);
+}
+
+function removeTeamMember(index) {
+    const memberCard = document.querySelector(`[data-member-index="${index}"]`);
+    if (memberCard) {
+        memberCard.remove();
+        updateMemberNumbers();
+    }
+}
+
+function updateMemberNumbers() {
+    const memberCards = teamMembersContainer.querySelectorAll('.team-member-card');
+    memberCards.forEach((card, index) => {
+        const memberNumber = card.querySelector('.member-number');
+        memberNumber.textContent = `Member ${index + 1}`;
+        card.dataset.memberIndex = index + 1;
+    });
+    memberCount = memberCards.length;
+}
+
+function collectTeamMembers() {
+    const members = [];
+    const memberCards = teamMembersContainer.querySelectorAll('.team-member-card');
+
+    memberCards.forEach((card, index) => {
+        const name = card.querySelector('.member-name').value;
+        const department = card.querySelector('.member-department').value;
+        const email = card.querySelector('.member-email').value;
+        const phone = card.querySelector('.member-phone').value;
+
+        members.push({
+            name,
+            department,
+            email,
+            phone: phone || null
+        });
+    });
+
+    return members;
+}
+
+// Make removeTeamMember available globally
+window.removeTeamMember = removeTeamMember;
+
+//========================================
 // PASSWORD VISIBILITY TOGGLE
 // ========================================
 
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm-password');
 const togglePassword = document.getElementById('toggle-password');
-const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
 
 togglePassword.addEventListener('click', () => {
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     passwordInput.setAttribute('type', type);
-});
-
-toggleConfirmPassword.addEventListener('click', () => {
-    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    confirmPasswordInput.setAttribute('type', type);
 });
 
 // ========================================
@@ -264,6 +354,7 @@ registerForm.addEventListener('submit', (e) => {
         techStack: document.getElementById('tech-stack').value,
         projectUrl: document.getElementById('project-url').value,
         videoUrl: document.getElementById('video-url').value,
+        teamMembers: collectTeamMembers() // Collect team member data
     };
 
     // Store credentials in localStorage (FOR DEVELOPMENT ONLY!)
