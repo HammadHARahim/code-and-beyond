@@ -10,6 +10,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE participants (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  email VARCHAR(255) NOT NULL,
   
   -- Team Information
   team_name VARCHAR(255) NOT NULL,
@@ -27,6 +28,7 @@ CREATE TABLE participants (
   tech_stack TEXT,
   project_url TEXT,
   video_url TEXT,
+  project_doc_url TEXT,
   
   -- Accommodation
   accommodation_needed BOOLEAN DEFAULT false,

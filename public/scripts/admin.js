@@ -63,16 +63,16 @@ async function loadParticipants() {
         if (error) {
             console.error('Error loading participants:', error);
             if (tbody) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:#ff4444;">Error loading participants: ${error.message}</td></tr>`;
+                tbody.innerHTML = `< tr > <td colspan="7" style="text-align:center; padding:2rem; color:#ff4444;">Error loading participants: ${error.message}</td></tr > `;
             }
             return;
         }
 
-        // Map Supabase data to our format
+        // Map Supabase data to our format (email is now directly in participants table)
         allParticipants = (data || []).map(p => ({
             id: p.id,
             userId: p.user_id,
-            email: '', // We'll need to get this from auth.users if needed
+            email: p.email || 'N/A',
             status: p.status,
             rejectionReason: p.rejection_reason,
             teamName: p.team_name,
@@ -88,6 +88,7 @@ async function loadParticipants() {
             techStack: p.tech_stack,
             projectUrl: p.project_url,
             videoUrl: p.video_url,
+            projectDocUrl: p.project_doc_url,
             accommodation: {
                 required: p.accommodation_needed,
                 type: p.accommodation_type,
@@ -129,12 +130,12 @@ function populateTable() {
 
     if (filteredParticipants.length === 0) {
         tbody.innerHTML = `
-            <tr>
-                <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255, 255, 255, 0.5);">
-                    No participants found. Registrations will appear here.
-                </td>
-            </tr>
-        `;
+    < tr >
+    <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255, 255, 255, 0.5);">
+        No participants found. Registrations will appear here.
+    </td>
+            </tr >
+    `;
         return;
     }
 
@@ -146,9 +147,9 @@ function populateTable() {
         const formattedDate = formatDate(participant.registeredAt);
 
         row.innerHTML = `
-            <td>
-                <input type="checkbox" class="table-checkbox row-checkbox" data-id="${participant.id}" />
-            </td>
+    < td >
+    <input type="checkbox" class="table-checkbox row-checkbox" data-id="${participant.id}" />
+            </td >
             <td>#${String(index + 1).padStart(3, '0')}</td>
             <td>${participant.teamLead || 'N/A'}</td>
             <td>${participant.projectTitle || 'N/A'}</td>
@@ -182,7 +183,7 @@ function populateTable() {
                     </svg>
                 </button>
             </td>
-        `;
+`;
 
         tbody.appendChild(row);
     });
@@ -238,7 +239,7 @@ async function approveParticipant(id) {
 
         if (error) {
             console.error('Error approving participant:', error);
-            alert(`Error: ${error.message}`);
+            alert(`Error: ${error.message} `);
             return;
         }
 
@@ -280,7 +281,7 @@ async function rejectParticipant() {
 
         if (error) {
             console.error('Error rejecting participant:', error);
-            alert(`Error: ${error.message}`);
+            alert(`Error: ${error.message} `);
             return;
         }
 
@@ -348,7 +349,7 @@ async function confirmDelete() {
 
         if (error) {
             console.error('Error deleting participant:', error);
-            alert(`Error: ${error.message}`);
+            alert(`Error: ${error.message} `);
             return;
         }
 
@@ -373,7 +374,7 @@ function viewParticipant(id) {
     // Status
     const statusBadge = document.getElementById('detail-status-badge');
     if (statusBadge) {
-        statusBadge.className = `badge badge-${participant.status || 'pending'}`;
+        statusBadge.className = `badge badge - ${participant.status || 'pending'} `;
         statusBadge.textContent = participant.status ? participant.status.charAt(0).toUpperCase() + participant.status.slice(1) : 'Pending';
     }
 
@@ -394,7 +395,7 @@ function viewParticipant(id) {
     document.getElementById('detail-phone').textContent = participant.phone || 'N/A';
     document.getElementById('detail-university').textContent = participant.university || 'N/A';
     document.getElementById('detail-department').textContent = participant.department || 'N/A';
-    document.getElementById('detail-team-size').textContent = participant.teamSize ? `${participant.teamSize} ${participant.teamSize === 1 ? 'Member' : 'Members'}` : 'N/A';
+    document.getElementById('detail-team-size').textContent = participant.teamSize ? `${participant.teamSize} ${participant.teamSize === 1 ? 'Member' : 'Members'} ` : 'N/A';
 
     // Project Details
     document.getElementById('detail-project-title').textContent = participant.projectTitle || 'N/A';
@@ -406,6 +407,7 @@ function viewParticipant(id) {
     // URLs
     const urlContainer = document.getElementById('detail-url-container');
     const videoContainer = document.getElementById('detail-video-container');
+    const docContainer = document.getElementById('detail-doc-container');
 
     if (participant.projectUrl) {
         const urlLink = document.getElementById('detail-url');
@@ -423,6 +425,15 @@ function viewParticipant(id) {
         videoContainer.style.display = 'block';
     } else {
         videoContainer.style.display = 'none';
+    }
+
+    if (participant.projectDocUrl) {
+        const docLink = document.getElementById('detail-doc');
+        docLink.href = participant.projectDocUrl;
+        docLink.textContent = participant.projectDocUrl;
+        docContainer.style.display = 'block';
+    } else {
+        docContainer.style.display = 'none';
     }
 
     // Registration Info
@@ -490,7 +501,7 @@ function updateFilterCount() {
         const total = allParticipants.length;
 
         if (count < total) {
-            titleElement.textContent = `Registered Participants (${count} of ${total})`;
+            titleElement.textContent = `Registered Participants(${count} of ${total})`;
         } else {
             titleElement.textContent = 'Registered Participants';
         }

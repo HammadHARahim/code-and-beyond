@@ -10,6 +10,9 @@ admin-credentials.json
 .env.local
 .env.example
 
+# Admin secrets - DO NOT COMMIT
+public/config/admin-env.js
+
 # IDE
 .vscode/
 .idea/

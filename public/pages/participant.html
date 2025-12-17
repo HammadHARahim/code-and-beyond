@@ -216,19 +216,6 @@
                 <div class="stat-card glass-card">
                     <div class="stat-icon">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" />
-                            <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" />
-                        </svg>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-label">Project Stage</div>
-                        <div class="stat-value">Development</div>
-                    </div>
-                </div>
-
-                <div class="stat-card glass-card">
-                    <div class="stat-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
                             <path d="M17 21V19C17 16.79 15.21 15 13 15H5C2.79 15 1 16.79 1 19V21" stroke="currentColor"
                                 stroke-width="2" />
                             <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" />
@@ -238,25 +225,21 @@
                         <div class="stat-label">Team Members</div>
                         <div class="stat-value" id="team-members-count">4</div>
                     </div>
-                </div>
-
-                <div class="stat-card glass-card">
-                    <div class="stat-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" />
+                    <button class="logout-btn-inline" onclick="logout()" title="Logout">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path
+                                d="M13 16L17 12L13 8M17 12H7M7 16C7 16.5304 6.78929 17.0391 6.41421 17.4142C6.03914 17.7893 5.53043 18 5 18H4C3.46957 18 2.96086 17.7893 2.58579 17.4142C2.21071 17.0391 2 16.5304 2 16V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H5C5.53043 2 6.03914 2.21071 6.41421 2.58579C6.78929 2.96086 7 3.46957 7 4"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-label">Days Until Event</div>
-                        <div class="stat-value">37</div>
-                    </div>
+                        <span class="logout-text">Logout</span>
+                    </button>
                 </div>
             </section>
         </div>
     </main>
 
     <script type="module" src="../scripts/participant.js"></script>
+    <script src="../scripts/logout.js"></script>
 </body>
 
 </html>

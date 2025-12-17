@@ -292,20 +292,7 @@ if (accommodationNo) {
     accommodationNo.addEventListener('change', toggleAccommodationDetails);
 }
 
-// ========================================
-// FILE UPLOAD HANDLER
-// ========================================
-const fileInput = document.getElementById('project-doc');
-const fileNameDisplay = document.getElementById('file-name');
-
-fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        fileNameDisplay.textContent = file.name;
-    } else {
-        fileNameDisplay.textContent = 'Upload PDF/DOC';
-    }
-});
+// File upload handler removed - now using URL input for project documents
 
 // ========================================
 // SUPABASE INTEGRATION
@@ -339,6 +326,7 @@ registerForm.addEventListener('submit', async (e) => {
     const accommodationRequired = document.querySelector('input[name="accommodation"]:checked')?.value === 'yes';
 
     const participantData = {
+        email: email,
         team_name: document.getElementById('team-name').value,
         team_lead: document.getElementById('team-lead').value,
         university: document.getElementById('university').value,
@@ -355,7 +343,8 @@ registerForm.addEventListener('submit', async (e) => {
         problem_solved: document.getElementById('problem-solved').value,
         tech_stack: document.getElementById('tech-stack').value,
         project_url: document.getElementById('project-url').value || null,
-        video_url: document.getElementById('video-url').value || null
+        video_url: document.getElementById('video-url').value || null,
+        project_doc_url: document.getElementById('project-doc-url').value || null
     };
 
     const teamMembers = collectTeamMembers();
