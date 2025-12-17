@@ -130,27 +130,30 @@ function populateTable() {
 
     if (filteredParticipants.length === 0) {
         tbody.innerHTML = `
-    < tr >
-    <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255, 255, 255, 0.5);">
-        No participants found. Registrations will appear here.
-    </td>
-            </tr >
-    `;
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255, 255, 255, 0.5);">
+                    No participants found. Registrations will appear here.
+                </td>
+            </tr>
+        `;
         return;
     }
 
-    filteredParticipants.forEach((participant, index) => {
+    filteredParticipants.forEach((participant) => {
         const row = document.createElement('tr');
         row.dataset.id = participant.id;
 
         const statusBadge = getStatusBadge(participant.status);
         const formattedDate = formatDate(participant.registeredAt);
 
+        // Extract numeric part from UUID for display (first 8 chars)
+        const displayId = participant.id.substring(0, 8).toUpperCase();
+
         row.innerHTML = `
-    < td >
-    <input type="checkbox" class="table-checkbox row-checkbox" data-id="${participant.id}" />
-            </td >
-            <td>#${String(index + 1).padStart(3, '0')}</td>
+            <td>
+                <input type="checkbox" class="table-checkbox row-checkbox" data-id="${participant.id}" />
+            </td>
+            <td>#${displayId}</td>
             <td>${participant.teamLead || 'N/A'}</td>
             <td>${participant.projectTitle || 'N/A'}</td>
             <td>${formatCategory(participant.category)}</td>
@@ -183,7 +186,7 @@ function populateTable() {
                     </svg>
                 </button>
             </td>
-`;
+        `;
 
         tbody.appendChild(row);
     });
