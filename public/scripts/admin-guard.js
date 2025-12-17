@@ -11,7 +11,7 @@ import { supabase } from './supabase-client.js';
         const { data: { session }, error } = await supabase.auth.getSession();
 
         if (error) {
-            console.error('Session check error:', error);
+            // console.error('Session check error:', error);
             redirectToLogin('Session error occurred');
             return;
         }
@@ -26,22 +26,22 @@ import { supabase } from './supabase-client.js';
 
         if (userRole !== 'admin') {
             alert('Access denied. Admin privileges required.');
-            console.error('Unauthorized access attempt by:', session.user.email);
+            // console.error('Unauthorized access attempt by:', session.user.email);
             // Redirect participants to their dashboard
             window.location.href = 'participant.html';
             return;
         }
 
         // Admin access granted
-        console.log('Admin access granted:', session.user.email);
+        // console.log('Admin access granted:', session.user.email);
 
     } catch (error) {
-        console.error('Admin guard error:', error);
+        // console.error('Admin guard error:', error);
         redirectToLogin('Authentication error');
     }
 })();
 
 function redirectToLogin(reason) {
-    console.log('Redirecting to login:', reason);
+    // console.log('Redirecting to login:', reason);
     window.location.href = 'login.html';
 }

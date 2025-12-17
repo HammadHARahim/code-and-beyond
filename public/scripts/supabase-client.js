@@ -9,8 +9,8 @@ const initSupabase = () => {
 
     // Check if credentials are set
     if (supabaseUrl.includes('REPLACE') || supabaseAnonKey.includes('REPLACE')) {
-        console.error('⚠️ Supabase credentials not set! Please update supabase-client.js with your credentials.');
-        console.error('Get them from: Supabase Dashboard → Settings → API');
+        // console.error('⚠️ Supabase credentials not set! Please update supabase-client.js with your credentials.');
+        // console.error('Get them from: Supabase Dashboard → Settings → API');
     }
 
     // Create Supabase client using CDN

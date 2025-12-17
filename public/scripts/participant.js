@@ -13,7 +13,7 @@ async function populateParticipantData() {
         const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
-            console.log('No user session found');
+            // console.log('No user session found');
             document.querySelector('.user-name').textContent = 'Guest';
             return;
         }
@@ -29,14 +29,14 @@ async function populateParticipantData() {
             .single();
 
         if (error) {
-            console.error('Error loading participant data:', error);
+            // console.error('Error loading participant data:', error);
             // Show friendly error message
             document.querySelector('.user-name').textContent = 'Error Loading Data';
             return;
         }
 
         if (!participant) {
-            console.log('No registration data found');
+            // console.log('No registration data found');
             document.querySelector('.user-name').textContent = user.email;
             return;
         }
@@ -209,7 +209,7 @@ async function populateParticipantData() {
         }
 
     } catch (error) {
-        console.error('Unexpected error loading participant data:', error);
+        // console.error('Unexpected error loading participant data:', error);
         document.querySelector('.user-name').textContent = 'Error';
     }
 }
@@ -425,7 +425,7 @@ function initNavigation() {
             item.classList.add('active');
 
             const section = item.dataset.section;
-            console.log(`Navigated to: ${section}`);
+            // console.log(`Navigated to: ${section}`);
         });
     });
 }
@@ -440,14 +440,14 @@ function initButtons() {
 
     if (downloadBtn) {
         downloadBtn.addEventListener('click', () => {
-            console.log('Download pass clicked');
+            // console.log('Download pass clicked');
             alert('Your digital entry pass will be downloaded as a PDF. This feature will be available soon!');
         });
     }
 
     if (shareBtn) {
         shareBtn.addEventListener('click', () => {
-            console.log('Share pass clicked');
+            // console.log('Share pass clicked');
             alert('Share your entry pass via:\\n• Email\\n• WhatsApp\\n• Social Media');
         });
     }
@@ -473,4 +473,4 @@ function initAnimations() {
     });
 }
 
-console.log('Participant Dashboard loaded with Supabase integration');
+// console.log('Participant Dashboard loaded with Supabase integration');

@@ -121,7 +121,7 @@ loginForm.addEventListener('submit', async (e) => {
         }
 
         // Successful login - redirect based on role
-        console.log(`${userRole} login successful:`, data.user.email);
+        // console.log(`${userRole} login successful:`, data.user.email);
 
         if (userRole === 'admin') {
             window.location.href = 'admin.html';
@@ -130,7 +130,7 @@ loginForm.addEventListener('submit', async (e) => {
         }
 
     } catch (error) {
-        console.error('Login error:', error);
+        // console.error('Login error:', error);
         alert('An unexpected error occurred. Please try again.');
     }
 });

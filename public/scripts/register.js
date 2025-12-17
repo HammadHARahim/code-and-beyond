@@ -368,7 +368,7 @@ registerForm.addEventListener('submit', async (e) => {
         });
 
         if (authError) {
-            console.error('Auth error:', authError);
+            // console.error('Auth error:', authError);
             alert(`Registration failed: ${authError.message}`);
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
@@ -385,7 +385,7 @@ registerForm.addEventListener('submit', async (e) => {
             .single();
 
         if (participantError) {
-            console.error('Participant error:', participantError);
+            // console.error('Participant error:', participantError);
             alert(`Failed to save registration: ${participantError.message}`);
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
@@ -406,20 +406,20 @@ registerForm.addEventListener('submit', async (e) => {
                 .insert(teamMemberRecords);
 
             if (membersError) {
-                console.error('Team members error:', membersError);
+                // console.error('Team members error:', membersError);
                 // Don't fail the whole registration, just log it
-                console.warn('Team members not saved, but registration successful');
+                // console.warn('Team members not saved, but registration successful');
             }
         }
 
-        console.log('Registration successful:', authData.user.email);
+        // console.log('Registration successful:', authData.user.email);
 
         // Show success message and redirect
         alert('Registration submitted successfully! You can now login with your credentials.');
         window.location.href = 'login.html';
 
     } catch (error) {
-        console.error('Unexpected error during registration:', error);
+        // console.error('Unexpected error during registration:', error);
         alert('An unexpected error occurred. Please try again.');
 
         const submitBtn = registerForm.querySelector('button[type="submit"]');

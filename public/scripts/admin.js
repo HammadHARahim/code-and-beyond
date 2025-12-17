@@ -61,7 +61,7 @@ async function loadParticipants() {
             .order('submitted_at', { ascending: false });
 
         if (error) {
-            console.error('Error loading participants:', error);
+            // console.error('Error loading participants:', error);
             if (tbody) {
                 tbody.innerHTML = `< tr > <td colspan="7" style="text-align:center; padding:2rem; color:#ff4444;">Error loading participants: ${error.message}</td></tr > `;
             }
@@ -103,7 +103,7 @@ async function loadParticipants() {
         populateTable();
 
     } catch (error) {
-        console.error('Unexpected error:', error);
+        // console.error('Unexpected error:', error);
         alert('Failed to load participants. Please refresh the page.');
     }
 }
@@ -238,7 +238,7 @@ async function approveParticipant(id) {
             .eq('id', id);
 
         if (error) {
-            console.error('Error approving participant:', error);
+            // console.error('Error approving participant:', error);
             alert(`Error: ${error.message} `);
             return;
         }
@@ -247,7 +247,7 @@ async function approveParticipant(id) {
         loadParticipants(); // Reload data
 
     } catch (error) {
-        console.error('Unexpected error:', error);
+        // console.error('Unexpected error:', error);
         alert('Failed to approve participant.');
     }
 }
@@ -280,7 +280,7 @@ async function rejectParticipant() {
             .eq('id', id);
 
         if (error) {
-            console.error('Error rejecting participant:', error);
+            // console.error('Error rejecting participant:', error);
             alert(`Error: ${error.message} `);
             return;
         }
@@ -290,7 +290,7 @@ async function rejectParticipant() {
         loadParticipants();
 
     } catch (error) {
-        console.error('Unexpected error:', error);
+        // console.error('Unexpected error:', error);
         alert('Failed to reject participant.');
     }
 }
@@ -348,7 +348,7 @@ async function confirmDelete() {
             .eq('id', currentDeleteId);
 
         if (error) {
-            console.error('Error deleting participant:', error);
+            // console.error('Error deleting participant:', error);
             alert(`Error: ${error.message} `);
             return;
         }
@@ -358,7 +358,7 @@ async function confirmDelete() {
         loadParticipants();
 
     } catch (error) {
-        console.error('Unexpected error:', error);
+        // console.error('Unexpected error:', error);
         alert('Failed to delete participant.');
     }
 }
