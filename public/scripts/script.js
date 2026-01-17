@@ -4,7 +4,7 @@
 
 function initCountdown() {
     // Set the event date - January 15, 2026, 10:00:00 AM
-    const eventDate = new Date('2026-01-21T10:00:00').getTime();
+    const eventDate = new Date('2026-02-02T10:00:00').getTime();
 
     function updateCountdown() {
         const now = new Date().getTime();
